@@ -6,6 +6,16 @@ class Scanner:
     Uses regular expressions to recognize tokens.
     """
 
+    PATTERNS = {
+        TokenType.NUMBER: r"\d+(\.\d+)?",
+        TokenType.PLUS: r"\+",
+        TokenType.MINUS: r"-",
+        TokenType.MUL: r"\*",
+        TokenType.DIV: r"/",
+        TokenType.LPAREN: r"\(",
+        TokenType.RPAREN: r"\)",
+    }
+
     def __init__(self, source: str):
         """Creates a new scanner instance.
 
