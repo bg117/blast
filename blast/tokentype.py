@@ -1,4 +1,6 @@
-class TokenType:
+from enum import Enum
+
+class TokenType(Enum):
     EOF = -1
 
     NUMBER = 0
