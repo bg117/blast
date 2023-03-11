@@ -35,12 +35,6 @@ class Parser:
         """
         return self._expression()
     
-    def _match(self, types):
-        if self._check(types):
-            self._advance()
-            return True
-        return False
-    
     def _check(self, types):
         if self._is_at_end():
             return False
@@ -67,7 +61,7 @@ class Parser:
         expr = self._multiplication()
         types = [TokenType.PLUS, TokenType.MINUS]
         
-        while self._match(types):
+        while self._check(types):
             operator = self._consume(types)
             right = self._multiplication()
             expr = BinaryExprAST(operator, expr, right)
@@ -78,7 +72,7 @@ class Parser:
         expr = self._unary()
         types = [TokenType.MUL, TokenType.DIV]
 
-        while self._match(types):
+        while self._check(types):
             operator = self._consume(types)
             right = self._unary()
             expr = BinaryExprAST(operator, expr, right)
@@ -86,16 +80,16 @@ class Parser:
         return expr
     
     def _unary(self):
-        if self._match([TokenType.MINUS]):
+        if self._check([TokenType.MINUS]):
             operator = self._consume([TokenType.MINUS])
             right = self._unary()
             return UnaryExprAST(operator, right)
         return self._primary()
     
     def _primary(self):
-        if self._match([TokenType.NUMBER]):
+        if self._check([TokenType.NUMBER]):
             return NumberExprAST(self._consume([TokenType.NUMBER]))
-        elif self._match([TokenType.LPAREN]):
+        elif self._check([TokenType.LPAREN]):
             self._consume([TokenType.LPAREN])
             expr = self._expression()
             self._consume([TokenType.RPAREN])
