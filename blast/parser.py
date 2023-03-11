@@ -84,3 +84,10 @@ class Parser:
             expr = BinaryExprAST(operator, expr, right)
 
         return expr
+    
+    def _unary(self):
+        if self._match([TokenType.MINUS]):
+            operator = self._consume([TokenType.MINUS])
+            right = self._unary()
+            return UnaryExprAST(operator, right)
+        return self._primary()

@@ -12,18 +12,12 @@ class AST(ABC):
 
 class ExprAST(AST):
     """Base class for all expression AST nodes.
-
-    This class is used to represent the abstract syntax tree of a BLAST
-    program.  It is used by the parser and the interpreter.
     """
     pass
 
 
 class BinaryExprAST(ExprAST):
     """AST node representing a binary expression.
-
-    This class is used to represent the abstract syntax tree of a BLAST
-    program.  It is used by the parser and the interpreter.
     """
     def __init__(self, op, lhs, rhs):
         """Initialize a BinaryExprAST.
@@ -38,11 +32,22 @@ class BinaryExprAST(ExprAST):
         self.rhs = rhs
 
 
+class UnaryExprAST(ExprAST):
+    """AST node representing a unary expression.
+    """
+    def __init__(self, op, expr):
+        """Initialize a UnaryExprAST.
+
+        Args:
+            op (Token): The operator.
+            expr (ExprAST): The expression.
+        """
+        self.op = op
+        self.expr = expr
+
+
 class NumberExprAST(ExprAST):
     """AST node representing a number.
-
-    This class is used to represent the abstract syntax tree of a BLAST
-    program.  It is used by the parser and the interpreter.
     """
     def __init__(self, val):
         """Initialize a NumberExprAST.
