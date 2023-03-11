@@ -72,9 +72,8 @@ class Scanner:
 
             self._advance()                 # advance to the next character
 
-        if s in self.PATTERNS.values():
-            self._add_token(s)
-            return
+        # check if the string matches any of the patterns
+        self._add_token(s)
     
     def _add_token(self, s):
         pass
