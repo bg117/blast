@@ -10,6 +10,9 @@ class AST(ABC):
 
     def __repr__(self):
         raise NotImplementedError("Cannot repr a base AST node")
+    
+    def accept(self, visitor):
+        raise NotImplementedError("Cannot accept from a base AST node")
 
 
 class ExprAST(AST):
@@ -35,6 +38,9 @@ class BinaryExprAST(ExprAST):
 
     def __repr__(self):
         return f"<{self.op!r} {self.lhs!r} {self.rhs!r}>"
+    
+    def accept(self, visitor):
+        return visitor.visit_binary_expr(self)
 
 
 class UnaryExprAST(ExprAST):
@@ -52,6 +58,9 @@ class UnaryExprAST(ExprAST):
 
     def __repr__(self):
         return f"<{self.op!r} {self.expr!r}>"
+    
+    def accept(self, visitor):
+        return visitor.visit_unary_expr(self)
 
 
 class NumberExprAST(ExprAST):
@@ -67,3 +76,6 @@ class NumberExprAST(ExprAST):
 
     def __repr__(self):
         return f"<{self.val!r}>"
+    
+    def accept(self, visitor):
+        return visitor.visit_number_expr(self)
