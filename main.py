@@ -1,5 +1,6 @@
 from blast.scanner import Scanner
 
+
 def main():
     source = '1 + 2 * 3 / 4'
 
@@ -9,6 +10,7 @@ def main():
 
     # print the tokens
     print([repr(token) for token in tokens])
+
 
 if __name__ == '__main__':
     main()
