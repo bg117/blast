@@ -70,6 +70,8 @@ class Scanner:
             c = self._source[self._current] # get the current character
             s += c                          # append it to the string
 
+            self._advance()                 # advance to the next character
+
         if s in self.PATTERNS.values():
             self._add_token(s)
             return
