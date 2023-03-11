@@ -1,6 +1,5 @@
 import re
-from .token import Token
-from .tokentype import TokenType
+from .token import Token, TokenType
 
 class Scanner:
     """Scanner class for lexical analysis of the input stream.

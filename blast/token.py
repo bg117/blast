@@ -1,3 +1,5 @@
+from enum import Enum
+
 class Token:
     def __init__(self, type, lexeme):
         self.type = type
@@ -14,3 +16,16 @@ class Token:
     
     def __hash__(self):
         return hash((self.type, self.lexeme))
+
+class TokenType(Enum):
+    EOF = -1
+
+    NUMBER = 0
+
+    PLUS = 1
+    MINUS = 2
+    MUL = 3
+    DIV = 4
+
+    LPAREN = 5
+    RPAREN = 6
