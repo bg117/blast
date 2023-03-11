@@ -16,7 +16,7 @@ class Token:
         return f"{self.type} {self.lexeme}"
 
     def __str__(self):
-        return self.__repr__()
+        return self.lexeme
 
     def __eq__(self, other):
         return self.type == other.type and self.lexeme == other.lexeme
