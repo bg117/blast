@@ -1,6 +1,7 @@
 from blast.scanner import Scanner
 from blast.parser import Parser
 from blast.ast import *
+from blast.interpreter import Interpreter
 
 
 def main():
@@ -17,6 +18,11 @@ def main():
     ast = parser.parse()
 
     print(ast)
+
+    interpreter = Interpreter(ast)
+    result = interpreter.evaluate()
+
+    print(result)
 
 
 if __name__ == '__main__':
