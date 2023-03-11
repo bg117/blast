@@ -36,7 +36,6 @@ class Scanner:
         while not self._is_at_end():    # while not EOF
             self._scan_token()          # scan the next token
 
-        self._tokens.append(Token(TokenType.EOF, None))  # EOF token
         return self._tokens
 
     def _is_at_end(self):
@@ -78,7 +77,11 @@ class Scanner:
         # find the token type that matches the string
         for token_type, pattern in self.PATTERNS.items():
             if re.match(pattern, s):
-                self._tokens.append(Token(token_type, s))
+                val = s
+                if token_type == TokenType.NUMBER:
+                    val = float(s)
+
+                self._tokens.append(Token(token_type, val))
                 return
 
         raise Exception(f"Invalid token: {s}")
