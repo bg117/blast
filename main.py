@@ -1,28 +1,36 @@
-from blast.scanner import Scanner
-from blast.parser import Parser
-from blast.ast import *
 from blast.interpreter import Interpreter
+
+from argparse import ArgumentParser
 
 
 def main():
-    source = '1 + 2 * 3 / 4.0'
+    argparser = ArgumentParser(description='Blast interpreter')
 
-    # create a new scanner instance
-    scanner = Scanner(source)
-    tokens = scanner.scan_tokens()
+    mutex_args = argparser.add_mutually_exclusive_group(required=True)
+    # either specify a file or run in interactive mode (default)
+    mutex_args.add_argument('file', nargs='?', type=str, help='file to interpret')
+    mutex_args.add_argument('-i', '--interactive', action='store_true', help='run in interactive mode')
 
-    # print the tokens
-    print(tokens)
+    args = argparser.parse_args()
 
-    parser = Parser(tokens=tokens)
-    ast = parser.parse()
+    if args.interactive:
+        repl()
+    else:
+        with open(args.file, 'r') as f:
+            Interpreter(f.read()).evaluate()
 
-    print(ast)
 
-    interpreter = Interpreter(ast=ast)
-    result = interpreter.evaluate()
-
-    print(result)
+def repl():
+    while True:
+        try:
+            result = Interpreter(input('>>> ')).evaluate()
+            if result is not None:
+                print(result)
+        except KeyboardInterrupt:
+            print('Bye!')
+            break
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':

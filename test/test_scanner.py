@@ -4,7 +4,7 @@ from blast.token import Token, TokenType
 
 
 class TestScanner(unittest.TestCase):
-    SOURCE = '1 + 2 * 3 / 4.0'
+    SOURCE = '1+2 * 3 / 4.0' # TODO: fix expression not getting recognized without whitespace
 
     def test_scan_tokens(self):
         scanner = Scanner(self.SOURCE)
