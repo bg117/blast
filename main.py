@@ -14,6 +14,7 @@ def main():
     print([repr(token) for token in tokens])
 
     parser = Parser(tokens)
+    ast = parser.parse()
 
 
 if __name__ == '__main__':
