@@ -13,7 +13,7 @@ class Token:
         self.lexeme = lexeme
 
     def __repr__(self):
-        return f"{self.type} {self.lexeme}"
+        return f"<{self.type}: {self.lexeme}>"
 
     def __str__(self):
         return self.lexeme

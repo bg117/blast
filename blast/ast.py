@@ -7,7 +7,9 @@ class AST(ABC):
     This class is used to represent the abstract syntax tree of a BLAST
     program.  It is used by the parser and the interpreter.
     """
-    pass
+
+    def __repr__(self):
+        raise NotImplementedError("Cannot repr a base AST node")
 
 
 class ExprAST(AST):
@@ -31,6 +33,9 @@ class BinaryExprAST(ExprAST):
         self.lhs = lhs
         self.rhs = rhs
 
+    def __repr__(self):
+        return f"<{self.op!r} {self.lhs!r} {self.rhs!r}>"
+
 
 class UnaryExprAST(ExprAST):
     """AST node representing a unary expression.
@@ -45,6 +50,9 @@ class UnaryExprAST(ExprAST):
         self.op = op
         self.expr = expr
 
+    def __repr__(self):
+        return f"<{self.op!r} {self.expr!r}>"
+
 
 class NumberExprAST(ExprAST):
     """AST node representing a number.
@@ -53,6 +61,9 @@ class NumberExprAST(ExprAST):
         """Initialize a NumberExprAST.
 
         Args:
-            val (float): The value of the number.
+            val (Token): The value of the number.
         """
         self.val = val
+
+    def __repr__(self):
+        return f"<{self.val!r}>"
