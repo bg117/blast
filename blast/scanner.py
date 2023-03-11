@@ -38,16 +38,15 @@ class Scanner:
             self._start = self._current # mark the beginning of the next lexeme
             self._scan_token()          # scan the next token
 
-        self._tokens.append(Token(TokenType.EOF, "", None, self._line)) # EOF token
+        self._tokens.append(Token(TokenType.EOF, None)) # EOF token
         return self._tokens
     
-    def _is_at_end(self) -> bool:
-        """Checks if the scanner has reached the end of the source code.
-
-        Returns:
-            bool: True if the scanner has reached the end of the source code, False otherwise.
-        """
+    def _is_at_end(self):
         return self._current >= len(self._source) # current index is greater than the length of the source code
     
-    def _scan_token(self) -> Token:
-        pass
+    def _scan_token(self):
+        if self._is_at_end():
+            return Token(TokenType.EOF, None)
+        
+        self._skip_comments()
+        self._skip_whitespace()
