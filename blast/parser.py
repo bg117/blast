@@ -91,3 +91,13 @@ class Parser:
             right = self._unary()
             return UnaryExprAST(operator, right)
         return self._primary()
+    
+    def _primary(self):
+        if self._match([TokenType.NUMBER]):
+            return NumberExprAST(self._consume([TokenType.NUMBER]))
+        elif self._match([TokenType.LPAREN]):
+            self._consume([TokenType.LPAREN])
+            expr = self._expression()
+            self._consume([TokenType.RPAREN])
+            return expr
+        raise Exception("Unexpected token")
