@@ -1,4 +1,6 @@
 from blast.scanner import Scanner
+from blast.parser import Parser
+from blast.ast import *
 
 
 def main():
@@ -10,6 +12,8 @@ def main():
 
     # print the tokens
     print([repr(token) for token in tokens])
+
+    parser = Parser(tokens)
 
 
 if __name__ == '__main__':

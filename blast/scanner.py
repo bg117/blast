@@ -25,9 +25,7 @@ class Scanner:
         """
         self._source = source
         self._tokens = []
-        self._start = 0
         self._current = 0
-        self._line = 1
 
     def scan_tokens(self) -> list[Token]:
         """Scans the source code and returns a list of tokens.
@@ -36,7 +34,6 @@ class Scanner:
             list[Token]: A list of tokens.
         """
         while not self._is_at_end():    # while not EOF
-            self._start = self._current  # mark the beginning of the next lexeme
             self._scan_token()          # scan the next token
 
         self._tokens.append(Token(TokenType.EOF, None))  # EOF token
