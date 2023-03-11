@@ -6,30 +6,29 @@ from .ast import *
 class Interpreter:
     """The interpreter for the BLAST programming language.
     """
-    def __init__(self, source: str):
-        """Initialize a new Interpreter instance from the given source code.
+    def __init__(self, source: str = None, parser: Parser = None, ast: AST = None):
+        """Initialize a new Interpreter instance from either:
+            - source code
+            - a Parser instance
+            - an AST instance
 
         Args:
-            source (str): The source code to interpret.
+            source (str?): The source code to interpret.
+            parser (Parser?): The Parser instance to interpret.
+            ast (AST?): The AST instance to interpret.
+        
+        Notes:
+            Only one of the arguments MUST be provided. If more than one is provided,
+            the Interpreter will use the first one provided.
         """
-        parser = Parser(source)
-        self.ast = parser.parse()
-
-    def __init__(self, parser: Parser):
-        """Initialize a new Interpreter instance from the given parser.
-
-        Args:
-            parser (Parser): The parser to use.
-        """
-        self.ast = parser.parse()
-    
-    def __init__(self, ast: AST):
-        """Initialize a new Interpreter instance from the given AST.
-
-        Args:
-            ast (AST): The AST to interpret.
-        """
-        self.ast = ast
+        if ast is not None:
+            self.ast = ast
+        elif parser is not None:
+            self.ast = parser.parse()
+        elif source is not None:
+            self.ast = Parser(source=source).parse()
+        else:
+            raise Exception("No source code, parser, or AST provided.")
 
     def evaluate(self):
         """Interpret the AST and return the result.

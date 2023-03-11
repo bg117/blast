@@ -8,23 +8,25 @@ class Parser:
     by the scanner into an abstract syntax tree.
     """
 
-    def __init__(self, source: str):
-        """Initialize a Parser using the given source code.
+    def __init__(self, source: str = None, tokens: list[Token] = None):
+        """Initialize a Parser using either:
+            - source code
+            - a list of tokens
 
         Args:
-            source (str): The source code to parse.
-        """
-        scanner = Scanner(source)
-        self.tokens = scanner.scan_tokens()
-        self.current = 0
+            source (str?): The source code to parse.
+            tokens (list[Token]?): The list of tokens to parse.
 
-    def __init__(self, tokens: list[Token]):
-        """Initialize a Parser using the given list of tokens.
-
-        Args:
-            tokens (list): The list of tokens to parse.
+        Notes:
+            Only one of the arguments MUST be provided. If more than one is provided,
+            the Parser will use the first one provided.
         """
-        self.tokens = tokens
+        if tokens is not None:
+            self.tokens = tokens
+        elif source is not None:
+            self.tokens = Scanner(source).scan_tokens()
+        else:
+            raise Exception("No source code or tokens provided.")
         self.current = 0
 
     def parse(self):

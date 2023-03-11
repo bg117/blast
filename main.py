@@ -14,12 +14,12 @@ def main():
     # print the tokens
     print(tokens)
 
-    parser = Parser(tokens)
+    parser = Parser(tokens=tokens)
     ast = parser.parse()
 
     print(ast)
 
-    interpreter = Interpreter(ast)
+    interpreter = Interpreter(ast=ast)
     result = interpreter.evaluate()
 
     print(result)
