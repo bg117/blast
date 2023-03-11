@@ -75,4 +75,12 @@ class Parser:
         return expr
     
     def _multiplication(self):
-        pass
+        expr = self._unary()
+        types = [TokenType.MUL, TokenType.DIV]
+
+        while self._match(types):
+            operator = self._consume(types)
+            right = self._unary()
+            expr = BinaryExprAST(operator, expr, right)
+
+        return expr
