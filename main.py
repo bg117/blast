@@ -1,10 +1,14 @@
-from blast.token import Token
-from blast.tokentype import TokenType
+from blast.scanner import Scanner
 
 def main():
-    token = Token(TokenType.NUMBER, 1)
+    source = '1 + 2 * 3 / 4'
 
-    print(repr(token))
+    # create a new scanner instance
+    scanner = Scanner(source)
+    tokens = scanner.scan_tokens()
+
+    # print the tokens
+    print([repr(token) for token in tokens])
 
 if __name__ == '__main__':
     main()
