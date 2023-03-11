@@ -51,11 +51,11 @@ class Scanner:
         self._current += 1 # increment current index
     
     def _skip_whitespace(self):
-        while not self._is_at_end() and self._is_whitespace():
+        while self._is_whitespace():
             self._advance()
 
     def _is_whitespace(self):
-        return self._source[self._current] in " \t\r\n\f\v"
+        return not self._is_at_end() and self._source[self._current] in " \t\r\n\f\v"
     
     def _scan_token(self):
         self._skip_whitespace()
