@@ -76,4 +76,10 @@ class Scanner:
         self._add_token(s)
     
     def _add_token(self, s):
-        pass
+        # find the token type that matches the string
+        for token_type, pattern in self.PATTERNS.items():
+            if re.match(pattern, s):
+                self._tokens.append(Token(token_type, s))
+                return
+        
+        raise Exception(f"Invalid token: {s}")
