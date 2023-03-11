@@ -11,7 +11,7 @@ def main():
     tokens = scanner.scan_tokens()
 
     # print the tokens
-    print([repr(token) for token in tokens])
+    print(tokens)
 
     parser = Parser(tokens)
     ast = parser.parse()
