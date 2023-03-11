@@ -59,7 +59,7 @@ class TestScanner(unittest.TestCase):
         scanner._scan_token()
         self.assertEqual(scanner._current, 11)
         scanner._scan_token()
-        self.assertEqual(scanner._current, 15)
+        self.assertEqual(scanner._current, 15) # end of '4.0'
 
     def test__add_token(self):
         scanner = Scanner(self.SOURCE)

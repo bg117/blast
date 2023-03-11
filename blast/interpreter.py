@@ -1,3 +1,4 @@
+from .token import TokenType
 from .parser import Parser
 from .ast import *
 
@@ -29,3 +30,27 @@ class Interpreter:
             ast (AST): The AST to interpret.
         """
         self.ast = ast
+
+    def evaluate(self):
+        """Interpret the AST and return the result.
+        """
+        return self.ast.accept(self)
+    
+    def visit_binary_expr(self, expr: BinaryExprAST):
+        if expr.op.type == TokenType.PLUS:
+            return expr.lhs.accept(self) + expr.rhs.accept(self)
+        elif expr.op.type == TokenType.MINUS:
+            return expr.lhs.accept(self) - expr.rhs.accept(self)
+        elif expr.op.type == TokenType.MUL:
+            return expr.lhs.accept(self) * expr.rhs.accept(self)
+        elif expr.op.type == TokenType.DIV:
+            return expr.lhs.accept(self) / expr.rhs.accept(self)
+        
+    def visit_unary_expr(self, expr: UnaryExprAST):
+        accept = expr.expr.accept(self)
+        if expr.op.type == TokenType.MINUS:
+            return -accept
+        return accept
+    
+    def visit_number_expr(self, expr: NumberExprAST):
+        return expr.val.lexeme
