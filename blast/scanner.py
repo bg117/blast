@@ -1,3 +1,4 @@
+import re
 from .token import Token
 from .tokentype import TokenType
 
