@@ -62,3 +62,17 @@ class Scanner:
 
         if self._is_at_end():
             return # do not do anything if at end of source code
+        
+        # get the characters until the next whitespace
+        # and check if it matches any of the patterns
+        s = ''
+        while self._is_whitespace():
+            c = self._source[self._current] # get the current character
+            s += c                          # append it to the string
+
+        if s in self.PATTERNS.values():
+            self._add_token(s)
+            return
+    
+    def _add_token(self, s):
+        pass
