@@ -40,13 +40,13 @@ class Parser:
     def _check(self, types):
         if self._is_at_end():
             return False
-        return self._tokens[self._current].type in types
+        return self._tokens[self._current].type in types # check if the current token is in the list of types
     
     def _consume(self, types):
         if self._check(types):
-            token = self._tokens[self._current]
-            self._advance()
-            return token
+            token = self._tokens[self._current] # get the current token
+            self._advance()                     # advance the current token
+            return token                        # return the previous token
         raise Exception("Unexpected token")
     
     def _is_at_end(self):
@@ -63,10 +63,10 @@ class Parser:
         expr = self._multiplication()
         types = [TokenType.PLUS, TokenType.MINUS]
         
-        while self._check(types):
+        while self._check(types): # while the current token is + or -, keep parsing higher precedence expressions
             operator = self._consume(types)
             right = self._multiplication()
-            expr = BinaryExprAST(operator, expr, right)
+            expr = BinaryExprAST(operator, expr, right) # create a new binary expression with the left and right expressions
         
         return expr
     
@@ -82,16 +82,16 @@ class Parser:
         return expr
     
     def _unary(self):
-        if self._check([TokenType.MINUS]):
-            operator = self._consume([TokenType.MINUS])
-            right = self._unary()
+        if self._check([TokenType.MINUS]):              # currently the only unary operator is -
+            operator = self._consume([TokenType.MINUS]) # consume the operator
+            right = self._unary()                       # right-recursively parse the next expression
             return UnaryExprAST(operator, right)
-        return self._primary()
+        return self._primary() # if there is no unary operator, parse the next expression
     
     def _primary(self):
-        if self._check([TokenType.NUMBER]):
+        if self._check([TokenType.NUMBER]):     # if the current token is a number, return a new NumberExprAST
             return NumberExprAST(self._consume([TokenType.NUMBER]))
-        elif self._check([TokenType.LPAREN]):
+        elif self._check([TokenType.LPAREN]):   # if the current token is a left parenthesis, parse the next expression
             self._consume([TokenType.LPAREN])
             expr = self._expression()
             self._consume([TokenType.RPAREN])
