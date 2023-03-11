@@ -66,7 +66,7 @@ class Scanner:
         # get the characters until the next whitespace
         # and check if it matches any of the patterns
         s = ''
-        while not self._is_whitespace():
+        while not self._is_at_end() and not self._is_whitespace():
             c = self._source[self._current] # get the current character
             s += c                          # append it to the string
 
