@@ -22,12 +22,12 @@ class Parser:
             the Parser will use the first one provided.
         """
         if tokens is not None:
-            self.tokens = tokens
+            self._tokens = tokens
         elif source is not None:
-            self.tokens = Scanner(source).scan_tokens()
+            self._tokens = Scanner(source).scan_tokens()
         else:
             raise Exception("No source code or tokens provided.")
-        self.current = 0
+        self._current = 0
 
     def parse(self):
         """Parse the tokens and return the abstract syntax tree.
@@ -40,21 +40,21 @@ class Parser:
     def _check(self, types):
         if self._is_at_end():
             return False
-        return self.tokens[self.current].type in types
+        return self._tokens[self._current].type in types
     
     def _consume(self, types):
         if self._check(types):
-            token = self.tokens[self.current]
+            token = self._tokens[self._current]
             self._advance()
             return token
         raise Exception("Unexpected token")
     
     def _is_at_end(self):
-        return self.current >= len(self.tokens)
+        return self._current >= len(self._tokens)
     
     def _advance(self):
         if not self._is_at_end():
-            self.current += 1
+            self._current += 1
     
     def _expression(self):
         return self._addition()
