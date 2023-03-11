@@ -4,19 +4,23 @@ from blast.token import Token, TokenType
 
 
 class TestScanner(unittest.TestCase):
-    SOURCE = '1+2 * 3 / 4.0' # TODO: fix expression not getting recognized without whitespace
+    SOURCE = '1 +2* (3 -7) / 4.0'
 
     def test_scan_tokens(self):
         scanner = Scanner(self.SOURCE)
         tokens = scanner.scan_tokens()
         self.assertListEqual(tokens, [
-            Token(TokenType.NUMBER, 1.0),
+            Token(TokenType.NUMBER, 1),
             Token(TokenType.PLUS, '+'),
-            Token(TokenType.NUMBER, 2.0),
+            Token(TokenType.NUMBER, 2),
             Token(TokenType.MUL, '*'),
-            Token(TokenType.NUMBER, 3.0),
+            Token(TokenType.LPAREN, '('),
+            Token(TokenType.NUMBER, 3),
+            Token(TokenType.MINUS, '-'),
+            Token(TokenType.NUMBER, 7),
+            Token(TokenType.RPAREN, ')'),
             Token(TokenType.DIV, '/'),
-            Token(TokenType.NUMBER, 4.0)
+            Token(TokenType.NUMBER, 4.0),
         ])
 
     def test__is_at_end(self):
@@ -51,15 +55,24 @@ class TestScanner(unittest.TestCase):
         scanner._scan_token()
         self.assertEqual(scanner._current, 3)
         scanner._scan_token()
+        self.assertEqual(scanner._current, 4)
+        scanner._scan_token()
         self.assertEqual(scanner._current, 5)
         scanner._scan_token()
         self.assertEqual(scanner._current, 7)
         scanner._scan_token()
-        self.assertEqual(scanner._current, 9)
+        self.assertEqual(scanner._current, 8)
+        scanner._scan_token()
+        self.assertEqual(scanner._current, 10)
         scanner._scan_token()
         self.assertEqual(scanner._current, 11)
         scanner._scan_token()
-        self.assertEqual(scanner._current, 15) # end of '4.0'
+        self.assertEqual(scanner._current, 12)
+        scanner._scan_token()
+        self.assertEqual(scanner._current, 14)
+        scanner._scan_token()
+        self.assertEqual(scanner._current, 18)
+
 
     def test__add_token(self):
         scanner = Scanner(self.SOURCE)

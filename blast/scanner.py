@@ -64,14 +64,20 @@ class Scanner:
         # get the characters until the next whitespace
         # and check if it matches any of the patterns
         s = ''
+        # if number, keep scanning until the next non-number character
         while not self._is_at_end() and not self._is_whitespace():
-            c = self._source[self._current]  # get the current character
-            s += c                          # append it to the string
-
-            self._advance()                 # advance to the next character
+            c = self._source[self._current] # get the current character
+            if c in '0123456789.':
+                s += c
+                self._advance()
+            else:
+                break
 
         # check if the string matches any of the patterns
-        self._add_token(s)
+        self._add_token(s if s != '' else self._source[self._current])
+        if s != '':
+            self._current -= 1
+        self._advance()
 
     def _add_token(self, s):
         # find the token type that matches the string
