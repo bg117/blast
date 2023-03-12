@@ -5,14 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: main.py",
+            "name": "Python: blast.py",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/main.py",
+            "program": "${workspaceFolder}/blast.py",
             "console": "integratedTerminal",
             "args": [
                 "-e",
-                "1+2*3/4"
+                "10**2"
             ],
             "justMyCode": true
         }

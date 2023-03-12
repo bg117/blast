@@ -37,14 +37,22 @@ class Interpreter:
         return self.ast.accept(self)
 
     def visit_binary_expr(self, expr: BinaryExprAST):
-        if expr.op.type == TokenType.PLUS:
-            return expr.lhs.accept(self) + expr.rhs.accept(self)
-        elif expr.op.type == TokenType.MINUS:
-            return expr.lhs.accept(self) - expr.rhs.accept(self)
-        elif expr.op.type == TokenType.MUL:
-            return expr.lhs.accept(self) * expr.rhs.accept(self)
-        elif expr.op.type == TokenType.DIV:
-            return expr.lhs.accept(self) / expr.rhs.accept(self)
+        lhs = expr.lhs.accept(self)
+        rhs = expr.rhs.accept(self)
+
+        match expr.op.type:
+            case TokenType.PLUS:
+                return lhs + rhs
+            case TokenType.MINUS:
+                return lhs - rhs
+            case TokenType.MUL:
+                return lhs * rhs    
+            case TokenType.DIV:
+                return lhs / rhs
+            case TokenType.MOD:
+                return lhs % rhs
+            case TokenType.EXP:
+                return lhs ** rhs
 
     def visit_unary_expr(self, expr: UnaryExprAST):
         accept = expr.expr.accept(self)

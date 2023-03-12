@@ -12,8 +12,10 @@ class Scanner:
         TokenType.STRING: r"\"([^\"]*)\"",
         TokenType.PLUS: r"(\+)",
         TokenType.MINUS: r"(-)",
+        TokenType.EXP: r"(\*\*)", # must be before TokenType.MUL to avoid matching **
         TokenType.MUL: r"(\*)",
         TokenType.DIV: r"(/)",
+        TokenType.MOD: r"(%)",
         TokenType.LPAREN: r"(\()",
         TokenType.RPAREN: r"(\))"
     }

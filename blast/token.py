@@ -38,6 +38,8 @@ class TokenType(IntEnum):
     MINUS = auto()
     MUL = auto()
     DIV = auto()
+    MOD = auto()
+    EXP = auto()
 
     LPAREN = auto()
     RPAREN = auto()

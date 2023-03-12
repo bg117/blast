@@ -5,10 +5,16 @@ from blast.parser import Parser
 
 class TestInterpreter(unittest.TestCase):
     AST = Parser(source="1 + (-2) * 3 / 4").parse()
+    AST2 = Parser(source="50 % 2").parse()
+    AST3 = Parser(source="10 ** 2").parse()
 
     def test_evaluate(self):
         interpreter = Interpreter(ast=self.AST)
         self.assertEqual(interpreter.evaluate(), -0.5)
+        interpreter = Interpreter(ast=self.AST2)
+        self.assertEqual(interpreter.evaluate(), 0)
+        interpreter = Interpreter(ast=self.AST3)
+        self.assertEqual(interpreter.evaluate(), 100)
 
     def test_visit_binary_expr(self):
         interpreter = Interpreter(ast=self.AST)
