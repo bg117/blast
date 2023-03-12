@@ -52,4 +52,4 @@ class Interpreter:
         return accept
     
     def visit_number_expr(self, expr: NumberExprAST):
-        return expr.val.lexeme
+        return expr.val
