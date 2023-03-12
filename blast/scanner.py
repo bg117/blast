@@ -39,7 +39,7 @@ class Scanner:
             self._scan_token()
 
         return self._tokens
-    
+
     def _is_at_end(self):
         # current index is greater than the length of the source code
         return self._current >= len(self._source)
@@ -66,5 +66,5 @@ class Scanner:
                 self._tokens.append(Token(token_type, match.group(1)))
                 self._current += match.end()
                 return
-            
+
         raise Exception(f"Unexpected character: {self._source[self._current]}")

@@ -73,7 +73,8 @@ class TestParser(unittest.TestCase):
         ]
         parser = Parser(tokens=tokens)
         ast = parser._multiplication()
-        self.assertIsInstance(ast, NumberExprAST) # only one node, because it only recognizes the multiplication/division operations
+        # only one node, because it only recognizes the multiplication/division operations
+        self.assertIsInstance(ast, NumberExprAST)
 
     def test__unary(self):
         tokens = [

@@ -7,9 +7,12 @@ def main():
 
     mutex_args = argparser.add_mutually_exclusive_group(required=True)
     # either specify a file, execute an expression, or run in interactive mode (default)
-    mutex_args.add_argument('file', nargs='?', type=str, help='file to interpret')
-    mutex_args.add_argument('-i', '--interactive', action='store_true', help='run in interactive mode')
-    mutex_args.add_argument('-e', '--expression', type=str, help='execute an expression')
+    mutex_args.add_argument('file', nargs='?', type=str,
+                            help='file to interpret')
+    mutex_args.add_argument('-i', '--interactive',
+                            action='store_true', help='run in interactive mode')
+    mutex_args.add_argument('-e', '--expression',
+                            type=str, help='execute an expression')
 
     args = argparser.parse_args()
 

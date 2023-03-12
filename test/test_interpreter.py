@@ -17,9 +17,11 @@ class TestInterpreter(unittest.TestCase):
     def test_visit_number_expr(self):
         interpreter = Interpreter(ast=self.AST)
         self.assertEqual(interpreter.visit_number_expr(self.AST.lhs), 1.0)
-        self.assertEqual(interpreter.visit_number_expr(self.AST.rhs.lhs.rhs), 3.0)
+        self.assertEqual(interpreter.visit_number_expr(
+            self.AST.rhs.lhs.rhs), 3.0)
         self.assertEqual(interpreter.visit_number_expr(self.AST.rhs.rhs), 4.0)
-    
+
     def test_visit_unary_expr(self):
         interpreter = Interpreter(ast=self.AST)
-        self.assertEqual(interpreter.visit_unary_expr(self.AST.rhs.lhs.lhs), -2.0)
+        self.assertEqual(interpreter.visit_unary_expr(
+            self.AST.rhs.lhs.lhs), -2.0)

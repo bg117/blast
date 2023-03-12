@@ -36,40 +36,43 @@ class Parser:
             AST: The abstract syntax tree.
         """
         return self._expression()
-    
+
     def _check(self, types):
         if self._is_at_end():
             return False
-        return self._tokens[self._current].type in types # check if the current token is in the list of types
-    
+        # check if the current token is in the list of types
+        return self._tokens[self._current].type in types
+
     def _consume(self, types):
         if self._check(types):
-            token = self._tokens[self._current] # get the current token
+            token = self._tokens[self._current]  # get the current token
             self._advance()                     # advance the current token
             return token                        # return the previous token
         raise Exception("Unexpected token")
-    
+
     def _is_at_end(self):
         return self._current >= len(self._tokens)
-    
+
     def _advance(self):
         if not self._is_at_end():
             self._current += 1
-    
+
     def _expression(self):
         return self._addition()
-    
+
     def _addition(self):
         expr = self._multiplication()
         types = [TokenType.PLUS, TokenType.MINUS]
-        
-        while self._check(types): # while the current token is + or -, keep parsing higher precedence expressions
+
+        # while the current token is + or -, keep parsing higher precedence expressions
+        while self._check(types):
             operator = self._consume(types)
             right = self._multiplication()
-            expr = BinaryExprAST(operator, expr, right) # create a new binary expression with the left and right expressions
-        
+            # create a new binary expression with the left and right expressions
+            expr = BinaryExprAST(operator, expr, right)
+
         return expr
-    
+
     def _multiplication(self):
         expr = self._unary()
         types = [TokenType.MUL, TokenType.DIV]
@@ -80,20 +83,25 @@ class Parser:
             expr = BinaryExprAST(operator, expr, right)
 
         return expr
-    
+
     def _unary(self):
-        if self._check([TokenType.MINUS]):              # currently the only unary operator is -
-            operator = self._consume([TokenType.MINUS]) # consume the operator
-            right = self._unary()                       # right-recursively parse the next expression
+        # currently the only unary operator is -
+        if self._check([TokenType.MINUS]):
+            operator = self._consume([TokenType.MINUS])  # consume the operator
+            # right-recursively parse the next expression
+            right = self._unary()
             return UnaryExprAST(operator, right)
-        return self._primary() # if there is no unary operator, parse the next expression
-    
+        return self._primary()  # if there is no unary operator, parse the next expression
+
     def _primary(self):
-        if self._check([TokenType.NUMBER]):     # if the current token is a number, return a new NumberExprAST
+        # if the current token is a number, return a new NumberExprAST
+        if self._check([TokenType.NUMBER]):
             return NumberExprAST(int(self._consume([TokenType.NUMBER]).lexeme))
-        elif self._check([TokenType.STRING]): # if the current token is a string, return a new StringExprAST
+        # if the current token is a string, return a new StringExprAST
+        elif self._check([TokenType.STRING]):
             return StringExprAST(self._consume([TokenType.STRING]).lexeme)
-        elif self._check([TokenType.LPAREN]):   # if the current token is a left parenthesis, parse the next expression
+        # if the current token is a left parenthesis, parse the next expression
+        elif self._check([TokenType.LPAREN]):
             self._consume([TokenType.LPAREN])
             expr = self._expression()
             self._consume([TokenType.RPAREN])

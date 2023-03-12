@@ -10,7 +10,7 @@ class AST(ABC):
 
     def __repr__(self):
         raise NotImplementedError("Cannot repr a base AST node")
-    
+
     def accept(self, visitor):
         raise NotImplementedError("Cannot accept from a base AST node")
 
@@ -24,6 +24,7 @@ class ExprAST(AST):
 class BinaryExprAST(ExprAST):
     """AST node representing a binary expression.
     """
+
     def __init__(self, op, lhs, rhs):
         """Initialize a BinaryExprAST.
 
@@ -38,7 +39,7 @@ class BinaryExprAST(ExprAST):
 
     def __repr__(self):
         return f"<{self.op!r} {self.lhs!r} {self.rhs!r}>"
-    
+
     def accept(self, visitor):
         return visitor.visit_binary_expr(self)
 
@@ -46,6 +47,7 @@ class BinaryExprAST(ExprAST):
 class UnaryExprAST(ExprAST):
     """AST node representing a unary expression.
     """
+
     def __init__(self, op, expr):
         """Initialize a UnaryExprAST.
 
@@ -58,7 +60,7 @@ class UnaryExprAST(ExprAST):
 
     def __repr__(self):
         return f"<{self.op!r} {self.expr!r}>"
-    
+
     def accept(self, visitor):
         return visitor.visit_unary_expr(self)
 
@@ -66,6 +68,7 @@ class UnaryExprAST(ExprAST):
 class NumberExprAST(ExprAST):
     """AST node representing a number.
     """
+
     def __init__(self, val):
         """Initialize a NumberExprAST.
 
@@ -76,14 +79,15 @@ class NumberExprAST(ExprAST):
 
     def __repr__(self):
         return f"<{self.val!r}>"
-    
+
     def accept(self, visitor):
         return visitor.visit_number_expr(self)
-    
+
 
 class StringExprAST(ExprAST):
     """AST node representing a string.
     """
+
     def __init__(self, val):
         """Initialize a StringExprAST.
 
@@ -94,6 +98,6 @@ class StringExprAST(ExprAST):
 
     def __repr__(self):
         return f"<{self.val!r}>"
-    
+
     def accept(self, visitor):
         return visitor.visit_string_expr(self)
