@@ -33,6 +33,7 @@ class TokenType(IntEnum):
 
     NUMBER = auto()
     STRING = auto()
+    IDENTIFIER = auto()
 
     PLUS = auto()
     MINUS = auto()

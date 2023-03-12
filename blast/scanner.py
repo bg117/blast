@@ -10,6 +10,7 @@ class Scanner:
     PATTERNS = {
         TokenType.NUMBER: r"(\d+)",
         TokenType.STRING: r"\"([^\"]*)\"",
+        TokenType.IDENTIFIER: r"(\w+)",
         TokenType.PLUS: r"(\+)",
         TokenType.MINUS: r"(-)",
         TokenType.EXP: r"(\*\*)", # must be before TokenType.MUL to avoid matching **

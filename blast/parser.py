@@ -111,6 +111,9 @@ class Parser:
         # if the current token is a string, return a new StringExprAST
         elif self._check([TokenType.STRING]):
             return StringExprAST(self._consume([TokenType.STRING]).lexeme)
+        # if the current token is an identifier, return a new VariableExprAST
+        elif self._check([TokenType.IDENTIFIER]):
+            return VariableExprAST(self._consume([TokenType.IDENTIFIER]).lexeme)
         # if the current token is a left parenthesis, parse the next expression
         elif self._check([TokenType.LPAREN]):
             self._consume([TokenType.LPAREN])

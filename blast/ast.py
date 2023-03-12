@@ -101,3 +101,22 @@ class StringExprAST(ExprAST):
 
     def accept(self, visitor):
         return visitor.visit_string_expr(self)
+    
+
+class VariableExprAST(ExprAST):
+    """AST node representing a variable.
+    """
+
+    def __init__(self, name):
+        """Initialize a VariableExprAST.
+
+        Args:
+            name (str): The name of the variable.
+        """
+        self.name = name
+
+    def __repr__(self):
+        return f"<{self.name!r}>"
+
+    def accept(self, visitor):
+        return visitor.visit_variable_expr(self)

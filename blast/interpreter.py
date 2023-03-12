@@ -65,3 +65,6 @@ class Interpreter:
 
     def visit_string_expr(self, expr: StringExprAST):
         return expr.val
+    
+    def visit_variable_expr(self, expr: VariableExprAST):
+        pass
