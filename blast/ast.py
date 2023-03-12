@@ -1,3 +1,9 @@
+"""Abstract syntax tree for the BLAST language.
+
+This module contains the classes representing the abstract syntax tree of a BLAST
+program.  It is used by the parser and the interpreter.
+"""
+
 from abc import ABC
 
 
@@ -12,6 +18,14 @@ class AST(ABC):
         raise NotImplementedError("Cannot repr a base AST node")
 
     def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Raises:
+            NotImplementedError: The base AST node cannot accept a visitor.
+        """
         raise NotImplementedError("Cannot accept from a base AST node")
 
 
@@ -41,6 +55,14 @@ class BinaryExprAST(ExprAST):
         return f"<{self.op!r} {self.lhs!r} {self.rhs!r}>"
 
     def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_binary_expr method.
+        """
         return visitor.visit_binary_expr(self)
 
 
@@ -62,6 +84,14 @@ class UnaryExprAST(ExprAST):
         return f"<{self.op!r} {self.expr!r}>"
 
     def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_unary_expr method.
+        """
         return visitor.visit_unary_expr(self)
 
 
@@ -81,6 +111,14 @@ class NumberExprAST(ExprAST):
         return f"<{self.val!r}>"
 
     def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_number_expr method.
+        """
         return visitor.visit_number_expr(self)
 
 
@@ -100,6 +138,14 @@ class StringExprAST(ExprAST):
         return f"<{self.val!r}>"
 
     def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_string_expr method.
+        """
         return visitor.visit_string_expr(self)
     
 
@@ -119,4 +165,12 @@ class VariableExprAST(ExprAST):
         return f"<{self.name!r}>"
 
     def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_variable_expr method.
+        """
         return visitor.visit_variable_expr(self)

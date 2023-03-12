@@ -1,3 +1,8 @@
+"""The interpreter for the BLAST programming language.
+
+This module contains the Interpreter class, which is used to interpret a BLAST program.
+"""
+
 from .token import Token, TokenType
 from .parser import Parser
 from .ast import *
@@ -5,12 +10,10 @@ from .symtab import SymbolTable
 
 
 class Interpreter:
-    """The interpreter for the BLAST programming language.
-    """
+    """The interpreter for the BLAST programming language."""
 
     def __init__(self):
-        """Initialize the Interpreter.
-        """
+        """Initialize the Interpreter."""
 
         self._symtab = SymbolTable()
 
@@ -42,6 +45,8 @@ class Interpreter:
 
         # if assignment, add to symbol table
         if expr.op.type == TokenType.COLON:
+            if not isinstance(expr.lhs, VariableExprAST):
+                raise Exception("Invalid assignment target")
             self._symtab[expr.lhs.name] = rhs
             return
 

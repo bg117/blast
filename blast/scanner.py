@@ -1,14 +1,22 @@
+"""Scanner module for lexical analysis of the input stream.
+
+This module contains the Scanner class, which is used to scan the input stream
+and return a list of tokens.
+"""
+
 import re
 from .token import Token, TokenType
 
 
 class Scanner:
     """Scanner class for lexical analysis of the input stream.
+
     Uses regular expressions to recognize tokens.
     """
 
+    """A dictionary of token types and their corresponding regular expressions."""
     PATTERNS = {
-        TokenType.NUMBER: r"(\d+)",
+        TokenType.NUMBER: r"(\d+(?:\.\d+)?)",
         TokenType.STRING: r"\"([^\"]*)\"",
         TokenType.IDENTIFIER: r"(\w+)",
         TokenType.PLUS: r"(\+)",
@@ -18,6 +26,7 @@ class Scanner:
         TokenType.DIV: r"(/)",
         TokenType.MOD: r"(%)",
         TokenType.COLON: r"(:)",
+        TokenType.PERIOD: r"(\.)",
         TokenType.LPAREN: r"(\()",
         TokenType.RPAREN: r"(\))"
     }

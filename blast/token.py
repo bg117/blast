@@ -1,3 +1,9 @@
+"""Token structure and token types.
+
+This module contains the Token class, which represents a token, and the TokenType
+enum, which represents the different types of tokens.
+"""
+
 from enum import IntEnum, auto
 
 
@@ -10,6 +16,17 @@ class Token:
     """
 
     def __init__(self, type, lexeme):
+        """Creates a new token.
+
+        Args:
+            type (TokenType): The type of the token.
+            lexeme (Any): The lexeme of the token.
+
+        Notes:
+            Technically, the lexeme can be any type, but it is usually a string,
+            even for tokens like NUMBER. This is to prevent the need for type
+            checking in the parser.
+        """
         self.type = type
         self.lexeme = lexeme
 
@@ -29,20 +46,22 @@ class Token:
 class TokenType(IntEnum):
     """Enum representing the different types of tokens.
     """
-    EOF = -1
+    EOF = -1            # end of file
 
-    NUMBER = auto()
-    STRING = auto()
-    IDENTIFIER = auto()
+    NUMBER = auto()     # integer
+    STRING = auto()     # string
+    IDENTIFIER = auto() # variable name
 
-    PLUS = auto()
-    MINUS = auto()
-    MUL = auto()
-    DIV = auto()
-    MOD = auto()
-    EXP = auto()
+    PLUS = auto()       # plus (+)
+    MINUS = auto()      # minus (-)
+    MUL = auto()        # multiplication (*)
+    DIV = auto()        # division (/)
+    MOD = auto()        # modulo (%)
+    EXP = auto()        # exponentiation (**)
 
-    COLON = auto() # for assignment
+    COLON = auto()      # colon (:) for assignment
 
-    LPAREN = auto()
-    RPAREN = auto()
+    PERIOD = auto()     # period (.) for ending a statement
+
+    LPAREN = auto()     # left parenthesis (
+    RPAREN = auto()     # right parenthesis )

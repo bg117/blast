@@ -1,8 +1,14 @@
+"""Symbol table implementation for use by the interpreter.
+
+This module contains the SymbolTable class, which is used by the interpreter to store
+variables and their values. It is a simple implementation of a symbol table.
+"""
+
 class SymbolTable:
-    """The symbol table for use by the interpreter.
-    """
+    """The symbol table for use by the interpreter."""
 
     def __init__(self):
+        """Initializes the symbol table."""
         self._symbols = {} # _symbols: {name: value}
 
     def __repr__(self):

@@ -11,8 +11,7 @@
             "program": "${workspaceFolder}/blast.py",
             "console": "integratedTerminal",
             "args": [
-                "-e",
-                "a:10"
+                "-i"
             ],
             "justMyCode": true
         }

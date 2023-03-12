@@ -1,11 +1,19 @@
+"""Parser for the BLAST language.
+
+This module contains the Parser class, which is used to parse the tokens collected
+by the scanner into an abstract syntax tree.
+"""
+
 from .scanner import Scanner
 from .token import Token, TokenType
 from .ast import *
 
 
 class Parser:
-    """The parser for the BLAST language. This class is used to parse the tokens collected
-    by the scanner into an abstract syntax tree.
+    """The parser for the BLAST language.
+    
+    This class is used to parse the tokens collected by the scanner into an abstract
+    syntax tree.
     """
 
     def __init__(self, source: str = None, tokens: list[Token] = None):
@@ -116,7 +124,14 @@ class Parser:
     def _primary(self):
         # if the current token is a number, return a new NumberExprAST
         if self._check([TokenType.NUMBER]):
-            return NumberExprAST(int(self._consume([TokenType.NUMBER]).lexeme))
+            # check if convertible to int (assume float if not)
+            token = self._consume([TokenType.NUMBER])
+            try:
+                val = int(token.lexeme)
+            except ValueError:
+                val = float(token.lexeme)
+
+            return NumberExprAST(val)
         # if the current token is a string, return a new StringExprAST
         elif self._check([TokenType.STRING]):
             return StringExprAST(self._consume([TokenType.STRING]).lexeme)
