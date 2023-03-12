@@ -1,5 +1,4 @@
 from blast.interpreter import Interpreter
-
 from argparse import ArgumentParser
 
 
