@@ -25,7 +25,7 @@ def main():
 def repl():
     while True:
         try:
-            result = Interpreter(input('>>> ')).evaluate()
+            result = Interpreter(source=input('>>> ')).evaluate()
             if result is not None:
                 print(result)
         except KeyboardInterrupt:
