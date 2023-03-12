@@ -48,7 +48,7 @@ class Interpreter:
             if not isinstance(expr.lhs, VariableExprAST):
                 raise Exception("Invalid assignment target")
             self._symtab[expr.lhs.name] = rhs
-            return
+            return # return nothing
 
         lhs = expr.lhs.accept(self)
 
@@ -86,3 +86,12 @@ class Interpreter:
         
     def visit_expr_stmt(self, stmt: ExprStmtAST):
         return stmt.expr.accept(self)
+    
+    def visit_block_stmt(self, stmt: BlockStmtAST):
+        results = []
+        for statement in stmt.stmts:
+            accept = statement.accept(self)
+            if accept is not None: # only append if it returns something
+                results.append(accept)
+
+        return results

@@ -207,3 +207,30 @@ class ExprStmtAST(StmtAST):
             Any: The result of the visitor's visit_expr_stmt method.
         """
         return visitor.visit_expr_stmt(self)
+
+
+class BlockStmtAST(StmtAST):
+    """AST node representing a block statement.
+    """
+
+    def __init__(self, stmts):
+        """Initialize a BlockStmtAST.
+
+        Args:
+            stmts (list[StmtAST]): The statements in the block.
+        """
+        self.stmts = stmts
+
+    def __repr__(self):
+        return f"<{self.stmts!r}>"
+
+    def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_block_stmt method.
+        """
+        return visitor.visit_block_stmt(self)

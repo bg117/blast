@@ -43,7 +43,7 @@ class Parser:
         Returns:
             AST: The abstract syntax tree.
         """
-        return self._statement()
+        return self._program()
 
     def _check(self, types):
         if self._is_at_end():
@@ -56,7 +56,11 @@ class Parser:
             token = self._tokens[self._current]  # get the current token
             self._advance()                     # advance the current token
             return token                        # return the previous token
-        raise Exception("Unexpected token")
+        # if at end, raise an EOF error
+        if self._is_at_end():
+            raise Exception("Unexpected end of file")
+        # otherwise, raise an unexpected token error
+        raise Exception(f"Unexpected token: {self._tokens[self._current]}")
 
     def _is_at_end(self):
         return self._current >= len(self._tokens)
@@ -146,8 +150,20 @@ class Parser:
             return expr
         raise Exception(f"Unexpected token: {self._tokens[self._current]}")
     
+    def _program(self):
+        # store all statements in a list
+        statements = []
+        # while the current token is not EOF, parse the next statement
+        while not self._is_at_end():
+            statements.append(self._statement())
+        
+        return BlockStmtAST(statements)
+    
     def _statement(self):
         return self._expression_statement()
     
     def _expression_statement(self):
-        return ExprStmtAST(self._expression())
+        stmt = ExprStmtAST(self._expression())
+        self._consume([TokenType.PERIOD])
+
+        return stmt

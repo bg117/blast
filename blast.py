@@ -29,9 +29,11 @@ def repl():
     interpreter = Interpreter()
     while True:
         try:
-            result = interpreter.evaluate(input('>>> '))
-            if result is not None:
-                print(result)
+            results = interpreter.evaluate(input('>>> '))
+            # check if empty list
+            if results:
+                for result in results:
+                    print(result)
         except KeyboardInterrupt:
             print('Bye!')
             break
