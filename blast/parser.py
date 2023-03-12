@@ -87,6 +87,7 @@ class Parser:
     def _exponent(self):
         expr = self._unary()
 
+        # right-recursive; parse the next expression first (which is either an exponent or a unary expression)
         if self._check([TokenType.EXP]):
             operator = self._consume([TokenType.EXP])
             right = self._exponent()
