@@ -53,3 +53,6 @@ class Interpreter:
     
     def visit_number_expr(self, expr: NumberExprAST):
         return expr.val
+    
+    def visit_string_expr(self, expr: StringExprAST):
+        return expr.val

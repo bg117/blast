@@ -70,7 +70,7 @@ class NumberExprAST(ExprAST):
         """Initialize a NumberExprAST.
 
         Args:
-            val (Token): The value of the number.
+            val (int): The value of the number.
         """
         self.val = val
 
@@ -79,3 +79,21 @@ class NumberExprAST(ExprAST):
     
     def accept(self, visitor):
         return visitor.visit_number_expr(self)
+    
+
+class StringExprAST(ExprAST):
+    """AST node representing a string.
+    """
+    def __init__(self, val):
+        """Initialize a StringExprAST.
+
+        Args:
+            val (str): The value of the string.
+        """
+        self.val = val
+
+    def __repr__(self):
+        return f"<{self.val!r}>"
+    
+    def accept(self, visitor):
+        return visitor.visit_string_expr(self)

@@ -91,6 +91,8 @@ class Parser:
     def _primary(self):
         if self._check([TokenType.NUMBER]):     # if the current token is a number, return a new NumberExprAST
             return NumberExprAST(int(self._consume([TokenType.NUMBER]).lexeme))
+        elif self._check([TokenType.STRING]): # if the current token is a string, return a new StringExprAST
+            return StringExprAST(self._consume([TokenType.STRING]).lexeme)
         elif self._check([TokenType.LPAREN]):   # if the current token is a left parenthesis, parse the next expression
             self._consume([TokenType.LPAREN])
             expr = self._expression()

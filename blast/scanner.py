@@ -9,6 +9,7 @@ class Scanner:
 
     PATTERNS = {
         TokenType.NUMBER: r"\d+",
+        TokenType.STRING: r"\"[^\"]*\"",
         TokenType.PLUS: r"\+",
         TokenType.MINUS: r"-",
         TokenType.MUL: r"\*",
