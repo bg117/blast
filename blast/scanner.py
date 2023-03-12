@@ -18,7 +18,6 @@ class Scanner:
     PATTERNS = {
         TokenType.NUMBER: r"(\d+(?:\.\d+)?)",
         TokenType.STRING: r"\"([^\"]*)\"",
-        TokenType.IDENTIFIER: r"(\w+)",
         TokenType.PLUS: r"(\+)",
         TokenType.MINUS: r"(-)",
         TokenType.EXP: r"(\*\*)", # must be before TokenType.MUL to avoid matching **
@@ -28,7 +27,12 @@ class Scanner:
         TokenType.COLON: r"(:)",
         TokenType.PERIOD: r"(\.)",
         TokenType.LPAREN: r"(\()",
-        TokenType.RPAREN: r"(\))"
+        TokenType.RPAREN: r"(\))",
+        TokenType.IF: r"(if)",
+        TokenType.THEN: r"(then)",
+        TokenType.ELSE: r"(else)",
+        TokenType.END: r"(end)",
+        TokenType.IDENTIFIER: r"(\w+)" # must be last to avoid matching keywords
     }
 
     def __init__(self, source: str):

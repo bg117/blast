@@ -95,3 +95,9 @@ class Interpreter:
                 results.append(accept)
 
         return results
+    
+    def visit_if_stmt(self, stmt: IfStmtAST):
+        if stmt.cond.accept(self):
+            return stmt.then_block.accept(self)
+        elif stmt.else_block is not None:
+            return stmt.else_block.accept(self)

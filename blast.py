@@ -1,5 +1,7 @@
+from typing import Iterable
 from blast.interpreter import Interpreter
 from argparse import ArgumentParser
+import itertools
 
 
 def main():
@@ -32,13 +34,25 @@ def repl():
             results = interpreter.evaluate(input('>>> '))
             # check if empty list
             if results:
-                for result in results:
-                    print(result)
+                # flatten list
+                results = flatten(results)
+                # print results
+                print(*results, sep='\n')
         except KeyboardInterrupt:
             print('Bye!')
             break
         except Exception as e:
             print(e)
+
+
+def flatten(items):
+    """Yield items from any nested iterable; see Reference."""
+    for x in items:
+        if isinstance(x, Iterable) and not isinstance(x, (str, bytes)):
+            for sub_x in flatten(x):
+                yield sub_x
+        else:
+            yield x
 
 
 if __name__ == '__main__':

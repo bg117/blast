@@ -160,10 +160,37 @@ class Parser:
         return BlockStmtAST(statements)
     
     def _statement(self):
-        return self._expression_statement()
+        # if current token is "if", parse an if statement
+        if self._check([TokenType.IF]):
+            return self._if_statement()
+        else:
+            return self._expression_statement()
     
     def _expression_statement(self):
         stmt = ExprStmtAST(self._expression())
         self._consume([TokenType.PERIOD])
 
         return stmt
+    
+    def _if_statement(self):
+        self._consume([TokenType.IF])
+        condition = self._expression()
+
+        self._consume([TokenType.THEN])
+        then_branch = self._block_statement_until([TokenType.ELSE, TokenType.END]) # parse until "else" or "end"
+        else_branch = None
+
+        if self._check([TokenType.ELSE]):                               # if there is an else branch, parse it
+            self._consume([TokenType.ELSE])                             # consume the "else"
+            else_branch = self._block_statement_until([TokenType.END])  # parse until "end"
+        
+        self._consume([TokenType.END])
+        return IfStmtAST(condition, then_branch, else_branch)
+    
+    def _block_statement_until(self, types):
+        statements = []
+        while not self._is_at_end() and not self._check(types):
+            statements.append(self._statement())
+        if self._is_at_end():
+            raise Exception("Unexpected end of file")
+        return BlockStmtAST(statements)

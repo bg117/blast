@@ -65,3 +65,8 @@ class TokenType(IntEnum):
 
     LPAREN = auto()     # left parenthesis (
     RPAREN = auto()     # right parenthesis )
+
+    IF = auto()         # if keyword
+    THEN = auto()       # then keyword
+    ELSE = auto()       # else keyword
+    END = auto()        # end keyword

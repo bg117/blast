@@ -234,3 +234,36 @@ class BlockStmtAST(StmtAST):
             Any: The result of the visitor's visit_block_stmt method.
         """
         return visitor.visit_block_stmt(self)
+
+
+class IfStmtAST(StmtAST):
+    """AST node representing an if statement.
+    """
+
+    def __init__(self, cond, then_block, else_block):
+        """Initialize an IfStmtAST.
+
+        Args:
+            cond (ExprAST): The condition.
+            then_block (StmtAST): The block to execute if the condition is
+                true.
+            else_block (StmtAST): The block to execute if the condition is
+                false.
+        """
+        self.cond = cond
+        self.then_block = then_block
+        self.else_block = else_block
+
+    def __repr__(self):
+        return f"<{self.cond!r} {self.then_block!r} {self.else_block!r}>"
+
+    def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_if_stmt method.
+        """
+        return visitor.visit_if_stmt(self)
