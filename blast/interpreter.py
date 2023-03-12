@@ -1,6 +1,7 @@
 from .token import Token, TokenType
 from .parser import Parser
 from .ast import *
+from .symtab import SymbolTable
 
 
 class Interpreter:
@@ -23,18 +24,20 @@ class Interpreter:
             the Interpreter will use the first one provided.
         """
         if ast is not None:
-            self.ast = ast
+            self._ast = ast
         elif tokens is not None:
-            self.ast = Parser(tokens=tokens).parse()
+            self._ast = Parser(tokens=tokens).parse()
         elif source is not None:
-            self.ast = Parser(source=source).parse()
+            self._ast = Parser(source=source).parse()
         else:
             raise Exception("No source code, parser, or AST provided.")
+
+        self._symtab = SymbolTable()
 
     def evaluate(self):
         """Interpret the AST and return the result.
         """
-        return self.ast.accept(self)
+        return self._ast.accept(self)
 
     def visit_binary_expr(self, expr: BinaryExprAST):
         lhs = expr.lhs.accept(self)
@@ -67,4 +70,7 @@ class Interpreter:
         return expr.val
     
     def visit_variable_expr(self, expr: VariableExprAST):
-        pass
+        try:
+            return self._symtab[expr.name]
+        except KeyError:
+            raise Exception(f"Undefined variable '{expr.name}'")
