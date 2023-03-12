@@ -8,14 +8,14 @@ class Scanner:
     """
 
     PATTERNS = {
-        TokenType.NUMBER: r"\d+",
-        TokenType.STRING: r"\"[^\"]*\"",
-        TokenType.PLUS: r"\+",
-        TokenType.MINUS: r"-",
-        TokenType.MUL: r"\*",
-        TokenType.DIV: r"/",
-        TokenType.LPAREN: r"\(",
-        TokenType.RPAREN: r"\)"
+        TokenType.NUMBER: r"(\d+)",
+        TokenType.STRING: r"\"([^\"]*)\"",
+        TokenType.PLUS: r"(\+)",
+        TokenType.MINUS: r"(-)",
+        TokenType.MUL: r"(\*)",
+        TokenType.DIV: r"(/)",
+        TokenType.LPAREN: r"(\()",
+        TokenType.RPAREN: r"(\))"
     }
 
     def __init__(self, source: str):
@@ -63,7 +63,7 @@ class Scanner:
         for token_type, pattern in self.PATTERNS.items():
             match = re.match(pattern, self._source[self._current:])
             if match:
-                self._tokens.append(Token(token_type, match.group()))
+                self._tokens.append(Token(token_type, match.group(1)))
                 self._current += match.end()
                 return
             
