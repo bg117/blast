@@ -29,7 +29,7 @@ class Parser:
             raise Exception("No source code or tokens provided.")
         self._current = 0
 
-    def parse(self):
+    def parse(self) -> AST:
         """Parse the tokens and return the abstract syntax tree.
 
         Returns:
@@ -90,7 +90,7 @@ class Parser:
     
     def _primary(self):
         if self._check([TokenType.NUMBER]):     # if the current token is a number, return a new NumberExprAST
-            return NumberExprAST(self._consume([TokenType.NUMBER]))
+            return NumberExprAST(int(self._consume([TokenType.NUMBER]).lexeme))
         elif self._check([TokenType.LPAREN]):   # if the current token is a left parenthesis, parse the next expression
             self._consume([TokenType.LPAREN])
             expr = self._expression()
