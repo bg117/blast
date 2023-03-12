@@ -117,4 +117,4 @@ class Parser:
             expr = self._expression()
             self._consume([TokenType.RPAREN])
             return expr
-        raise Exception("Unexpected token")
+        raise Exception(f"Unexpected token: {self._tokens[self._current]}")
