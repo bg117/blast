@@ -83,3 +83,6 @@ class Interpreter:
             return self._symtab[expr.name]
         except KeyError:
             raise Exception(f"Undefined variable '{expr.name}'")
+        
+    def visit_expr_stmt(self, stmt: ExprStmtAST):
+        return stmt.expr.accept(self)

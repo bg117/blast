@@ -43,7 +43,7 @@ class Parser:
         Returns:
             AST: The abstract syntax tree.
         """
-        return self._expression()
+        return self._statement()
 
     def _check(self, types):
         if self._is_at_end():
@@ -145,3 +145,9 @@ class Parser:
             self._consume([TokenType.RPAREN])
             return expr
         raise Exception(f"Unexpected token: {self._tokens[self._current]}")
+    
+    def _statement(self):
+        return self._expression_statement()
+    
+    def _expression_statement(self):
+        return ExprStmtAST(self._expression())

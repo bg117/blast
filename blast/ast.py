@@ -174,3 +174,36 @@ class VariableExprAST(ExprAST):
             Any: The result of the visitor's visit_variable_expr method.
         """
         return visitor.visit_variable_expr(self)
+    
+
+class StmtAST(AST):
+    """Base class for all statement AST nodes.
+    """
+    pass
+
+
+class ExprStmtAST(StmtAST):
+    """AST node representing an expression statement.
+    """
+
+    def __init__(self, expr):
+        """Initialize an ExprStmtAST.
+
+        Args:
+            expr (ExprAST): The expression.
+        """
+        self.expr = expr
+
+    def __repr__(self):
+        return f"<{self.expr!r}>"
+
+    def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_expr_stmt method.
+        """
+        return visitor.visit_expr_stmt(self)
