@@ -35,7 +35,6 @@ class Scanner:
         """
         # compile all the patterns
         while not self._is_at_end():
-            self._skip_whitespace()
             self._scan_token()
 
         return self._tokens
@@ -55,6 +54,8 @@ class Scanner:
             self._advance()
 
     def _scan_token(self):
+        self._skip_whitespace()
+
         # match next token to a pattern in PATTERNS dict
         # if match found, create a token and append to tokens list
         # if no match found, raise an error
