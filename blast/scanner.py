@@ -17,6 +17,7 @@ class Scanner:
         TokenType.MUL: r"(\*)",
         TokenType.DIV: r"(/)",
         TokenType.MOD: r"(%)",
+        TokenType.COLON: r"(:)",
         TokenType.LPAREN: r"(\()",
         TokenType.RPAREN: r"(\))"
     }

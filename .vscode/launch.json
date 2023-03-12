@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 "-e",
-                "10**2"
+                "a:10"
             ],
             "justMyCode": true
         }

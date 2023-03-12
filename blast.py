@@ -19,16 +19,17 @@ def main():
     if args.interactive:
         repl()
     elif args.expression:
-        print(Interpreter(args.expression).evaluate())
+        print(Interpreter().evaluate(args.expression))
     else:
         with open(args.file, 'r') as f:
-            Interpreter(f.read()).evaluate()
+            Interpreter().evaluate(f.read())
 
 
 def repl():
+    interpreter = Interpreter()
     while True:
         try:
-            result = Interpreter(source=input('>>> ')).evaluate()
+            result = interpreter.evaluate(input('>>> '))
             if result is not None:
                 print(result)
         except KeyboardInterrupt:

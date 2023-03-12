@@ -8,11 +8,14 @@ class Interpreter:
     """The interpreter for the BLAST programming language.
     """
 
-    def __init__(self, source: str = None, tokens: list[Token] = None, ast: AST = None):
-        """Initialize a new Interpreter instance from either:
-            - source code
-            - a list of tokens
-            - an abstract syntax tree
+    def __init__(self):
+        """Initialize the Interpreter.
+        """
+
+        self._symtab = SymbolTable()
+
+    def evaluate(self, source: str = None, tokens: list[Token] = None, ast: AST = None):
+        """Interpret the source code, tokens, or AST and return the result.
 
         Args:
             source (str?): The source code to interpret.
@@ -32,16 +35,17 @@ class Interpreter:
         else:
             raise Exception("No source code, parser, or AST provided.")
 
-        self._symtab = SymbolTable()
-
-    def evaluate(self):
-        """Interpret the AST and return the result.
-        """
         return self._ast.accept(self)
 
     def visit_binary_expr(self, expr: BinaryExprAST):
-        lhs = expr.lhs.accept(self)
         rhs = expr.rhs.accept(self)
+
+        # if assignment, add to symbol table
+        if expr.op.type == TokenType.COLON:
+            self._symtab[expr.lhs.name] = rhs
+            return
+
+        lhs = expr.lhs.accept(self)
 
         match expr.op.type:
             case TokenType.PLUS:

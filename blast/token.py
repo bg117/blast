@@ -42,5 +42,7 @@ class TokenType(IntEnum):
     MOD = auto()
     EXP = auto()
 
+    COLON = auto() # for assignment
+
     LPAREN = auto()
     RPAREN = auto()

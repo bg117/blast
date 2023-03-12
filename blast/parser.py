@@ -58,7 +58,16 @@ class Parser:
             self._current += 1
 
     def _expression(self):
-        return self._addition()
+        return self._assignment()
+    
+    def _assignment(self):
+        expr = self._addition()
+        # right-recursive
+        if self._check([TokenType.COLON]):
+            operator = self._consume([TokenType.COLON])
+            right = self._assignment()
+            return BinaryExprAST(operator, expr, right)
+        return expr
 
     def _addition(self):
         expr = self._multiplication()
