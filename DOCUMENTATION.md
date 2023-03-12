@@ -26,7 +26,7 @@
 
 #### `Interpreter` class
 
-- `__init__(self, source: str, parser: Parser, ast: AST)`: initialize interpreter with either source code, parser, or AST
+- `__init__(self, source: str, tokens: list[Token], ast: AST)`: initialize interpreter with either source code, list of tokens, or AST
 - `evaluate(self)`: evaluate source code into result
 
 ### `blast.ast`
@@ -42,7 +42,7 @@
 
 #### `Token` class
 
-- `__init__(self, type: TokenType, lexeme: str`: initialize token with type, lexeme
+- `__init__(self, type: TokenType, lexeme: str)`: initialize token with type, lexeme
 - `__str__(self) -> str`: string representation of token
 - `__repr__(self) -> str`: string representation of token
 - `__eq__(self, other: Token) -> bool`: equality of token

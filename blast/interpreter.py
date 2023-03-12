@@ -1,4 +1,4 @@
-from .token import TokenType
+from .token import Token, TokenType
 from .parser import Parser
 from .ast import *
 
@@ -6,16 +6,16 @@ from .ast import *
 class Interpreter:
     """The interpreter for the BLAST programming language.
     """
-    def __init__(self, source: str = None, parser: Parser = None, ast: AST = None):
+    def __init__(self, source: str = None, tokens: list[Token] = None, ast: AST = None):
         """Initialize a new Interpreter instance from either:
             - source code
-            - a Parser instance
-            - an AST instance
+            - a list of tokens
+            - an abstract syntax tree
 
         Args:
             source (str?): The source code to interpret.
-            parser (Parser?): The Parser instance to interpret.
-            ast (AST?): The AST instance to interpret.
+            tokens (list[Token]?): The list of tokens to interpret.
+            ast (AST?): The abstract syntax tree to interpret.
         
         Notes:
             Only one of the arguments MUST be provided. If more than one is provided,
@@ -23,8 +23,8 @@ class Interpreter:
         """
         if ast is not None:
             self.ast = ast
-        elif parser is not None:
-            self.ast = parser.parse()
+        elif tokens is not None:
+            self.ast = Parser(tokens=tokens).parse()
         elif source is not None:
             self.ast = Parser(source=source).parse()
         else:
