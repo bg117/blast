@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum, auto
 
 
 class Token:
@@ -25,17 +25,18 @@ class Token:
         return hash((self.type, self.lexeme))
 
 
-class TokenType(Enum):
+class TokenType(IntEnum):
     """Enum representing the different types of tokens.
     """
     EOF = -1
 
-    NUMBER = 0
+    NUMBER = auto()
+    STRING = auto()
 
-    PLUS = 1
-    MINUS = 2
-    MUL = 3
-    DIV = 4
+    PLUS = auto()
+    MINUS = auto()
+    MUL = auto()
+    DIV = auto()
 
-    LPAREN = 5
-    RPAREN = 6
+    LPAREN = auto()
+    RPAREN = auto()
