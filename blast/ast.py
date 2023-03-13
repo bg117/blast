@@ -327,7 +327,7 @@ class WhileStmtAST(StmtAST):
         return visitor.visit_while_stmt(self)
     
 
-class FuncStmtASR(StmtAST):
+class RoutineStmtAST(StmtAST):
     """AST node representing a function declaration.
     """
 
@@ -355,4 +355,4 @@ class FuncStmtASR(StmtAST):
         Returns:
             Any: The result of the visitor's visit_func_stmt method.
         """
-        return visitor.visit_func_stmt(self)
+        return visitor.visit_routine_stmt(self)

@@ -11,7 +11,7 @@ from .ast import *
 
 class Parser:
     """The parser for the BLAST language.
-    
+
     This class is used to parse the tokens collected by the scanner into an abstract
     syntax tree.
     """
@@ -71,7 +71,7 @@ class Parser:
 
     def _expression(self):
         return self._assignment()
-    
+
     def _assignment(self):
         expr = self._equality()
         # right-recursive
@@ -80,7 +80,7 @@ class Parser:
             right = self._assignment()
             return BinaryExprAST(operator, expr, right)
         return expr
-    
+
     def _equality(self):
         expr = self._relational()
         types = [TokenType.EQ, TokenType.NE]
@@ -89,7 +89,7 @@ class Parser:
             right = self._relational()
             expr = BinaryExprAST(operator, expr, right)
         return expr
-    
+
     def _relational(self):
         expr = self._addition()
         types = [TokenType.GT, TokenType.GE, TokenType.LT, TokenType.LE]
@@ -122,7 +122,7 @@ class Parser:
             expr = BinaryExprAST(operator, expr, right)
 
         return expr
-    
+
     def _exponent(self):
         expr = self._unary()
 
@@ -178,46 +178,52 @@ class Parser:
             self._consume([TokenType.RPAREN])
             return expr
         raise Exception(f"Unexpected token: {self._tokens[self._current]}")
-    
+
     def _program(self):
         # store all statements in a list
         statements = []
         # while the current token is not EOF, parse the next statement
         while not self._is_at_end():
             statements.append(self._statement())
-        
+
         return BlockStmtAST(statements)
-    
+
     def _statement(self):
         # if current token is "if", parse an if statement
         if self._check([TokenType.IF]):
             return self._if_statement()
         elif self._check([TokenType.WHILE]):
             return self._while_statement()
+        elif self._check([TokenType.ROUTINE]):
+            return self._routine_statement()
         else:
             return self._expression_statement()
-    
+
     def _expression_statement(self):
         stmt = ExprStmtAST(self._expression())
         self._consume([TokenType.PERIOD])
 
         return stmt
-    
+
     def _if_statement(self):
         self._consume([TokenType.IF])
         condition = self._expression()
 
         self._consume([TokenType.THEN])
-        then_branch = self._block_statement_until([TokenType.ELSE, TokenType.END]) # parse until "else" or "end"
+        then_branch = self._block_statement_until(
+            [TokenType.ELSE, TokenType.END])  # parse until "else" or "end"
         else_branch = None
 
-        if self._check([TokenType.ELSE]):                               # if there is an else branch, parse it
-            self._consume([TokenType.ELSE])                             # consume the "else"
-            else_branch = self._block_statement_until([TokenType.END])  # parse until "end"
-        
+        # if there is an else branch, parse it
+        if self._check([TokenType.ELSE]):
+            # consume the "else"
+            self._consume([TokenType.ELSE])
+            else_branch = self._block_statement_until(
+                [TokenType.END])  # parse until "end"
+
         self._consume([TokenType.END])
         return IfStmtAST(condition, then_branch, else_branch)
-    
+
     def _while_statement(self):
         self._consume([TokenType.WHILE])
         condition = self._expression()
@@ -225,7 +231,29 @@ class Parser:
         body = self._block_statement_until([TokenType.END])
         self._consume([TokenType.END])
         return WhileStmtAST(condition, body)
-    
+
+    def _routine_statement(self):
+        # consume the "routine" keyword
+        self._consume([TokenType.ROUTINE])
+        # consume the routine name
+        name = self._consume([TokenType.IDENTIFIER])
+
+        self._consume([TokenType.LPAREN])  # consume the left parenthesis
+        args = []
+
+        # while the current token is not a right parenthesis
+        while not self._check([TokenType.RPAREN]):
+            # consume the next argument
+            args.append(self._consume([TokenType.IDENTIFIER]).lexeme)
+
+        self._consume([TokenType.RPAREN])  # consume the right parenthesis
+
+        body = self._block_statement_until(
+            [TokenType.END])  # parse until "end"
+        self._consume([TokenType.END])
+
+        return RoutineStmtAST(name.lexeme, args, body)
+
     def _block_statement_until(self, types):
         statements = []
         while not self._is_at_end() and not self._check(types):

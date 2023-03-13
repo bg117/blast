@@ -154,3 +154,6 @@ class Interpreter:
                 results.append(accept)
 
         return results
+    
+    def visit_routine_stmt(self, stmt: RoutineStmtAST):
+        self._symtab.set(stmt.name, SymbolType.FUNCTION, stmt)
