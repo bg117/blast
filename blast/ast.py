@@ -325,3 +325,34 @@ class WhileStmtAST(StmtAST):
             Any: The result of the visitor's visit_while_stmt method.
         """
         return visitor.visit_while_stmt(self)
+    
+
+class FuncStmtASR(StmtAST):
+    """AST node representing a function declaration.
+    """
+
+    def __init__(self, name, args, body):
+        """Initialize a FuncStmtAST.
+
+        Args:
+            name (str): The name of the function.
+            args (list[str]): The arguments to the function.
+            body (StmtAST): The body of the function.
+        """
+        self.name = name
+        self.args = args
+        self.body = body
+
+    def __repr__(self):
+        return f"<{self.name!r} {self.args!r} {self.body!r}>"
+
+    def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_func_stmt method.
+        """
+        return visitor.visit_func_stmt(self)

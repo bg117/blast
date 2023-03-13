@@ -80,3 +80,5 @@ class TokenType(IntEnum):
 
     WHILE = auto()      # while keyword
     DO = auto()         # do keyword
+
+    ROUTINE = auto()    # routine keyword (for defining a function)

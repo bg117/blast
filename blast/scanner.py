@@ -40,6 +40,7 @@ class Scanner:
         TokenType.END: r"(end)",
         TokenType.WHILE: r"(while)",
         TokenType.DO: r"(do)",
+        TokenType.ROUTINE: r"(routine)",
         TokenType.IDENTIFIER: r"(\w+)" # must be last to avoid matching keywords
     }
 
