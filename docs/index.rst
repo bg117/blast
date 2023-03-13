@@ -1,10 +1,9 @@
 BLAST Documentation
 ===================
 
-BLAST is a programming language.
-
-Currently, it is merely a calculator, but it will be expanded to be a
-full programming language.
+BLAST is an almost-full-blown Turing-complete programming language. It is
+a toy language, and is not intended for serious use. It is, however, an
+example on how to implement a programming language in Python.
 
 .. toctree::
    :maxdepth: 2
