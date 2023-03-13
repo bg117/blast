@@ -163,6 +163,8 @@ class Parser:
         # if current token is "if", parse an if statement
         if self._check([TokenType.IF]):
             return self._if_statement()
+        elif self._check([TokenType.WHILE]):
+            return self._while_statement()
         else:
             return self._expression_statement()
     
@@ -186,6 +188,14 @@ class Parser:
         
         self._consume([TokenType.END])
         return IfStmtAST(condition, then_branch, else_branch)
+    
+    def _while_statement(self):
+        self._consume([TokenType.WHILE])
+        condition = self._expression()
+        self._consume([TokenType.DO])
+        body = self._block_statement_until([TokenType.END])
+        self._consume([TokenType.END])
+        return WhileStmtAST(condition, body)
     
     def _block_statement_until(self, types):
         statements = []

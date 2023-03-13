@@ -91,7 +91,7 @@ class Interpreter:
         results = []
         for statement in stmt.stmts:
             accept = statement.accept(self)
-            if accept is not None: # only append if it returns something
+            if accept: # only append if it returns something
                 results.append(accept)
 
         return results
@@ -99,5 +99,14 @@ class Interpreter:
     def visit_if_stmt(self, stmt: IfStmtAST):
         if stmt.cond.accept(self):
             return stmt.then_block.accept(self)
-        elif stmt.else_block is not None:
+        elif stmt.else_block:
             return stmt.else_block.accept(self)
+    
+    def visit_while_stmt(self, stmt: WhileStmtAST):
+        results = []
+        while stmt.cond.accept(self):
+            accept = stmt.body.accept(self)
+            if accept:
+                results.append(accept)
+
+        return results

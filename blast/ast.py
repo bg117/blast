@@ -267,3 +267,32 @@ class IfStmtAST(StmtAST):
             Any: The result of the visitor's visit_if_stmt method.
         """
         return visitor.visit_if_stmt(self)
+
+
+class WhileStmtAST(StmtAST):
+    """AST node representing a while statement.
+    """
+
+    def __init__(self, cond, body):
+        """Initialize a WhileStmtAST.
+
+        Args:
+            cond (ExprAST): The condition.
+            body (StmtAST): The body of the loop.
+        """
+        self.cond = cond
+        self.body = body
+
+    def __repr__(self):
+        return f"<{self.cond!r} {self.body!r}>"
+
+    def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_while_stmt method.
+        """
+        return visitor.visit_while_stmt(self)
