@@ -73,12 +73,30 @@ class Parser:
         return self._assignment()
     
     def _assignment(self):
-        expr = self._addition()
+        expr = self._equality()
         # right-recursive
         if self._check([TokenType.COLON]):
             operator = self._consume([TokenType.COLON])
             right = self._assignment()
             return BinaryExprAST(operator, expr, right)
+        return expr
+    
+    def _equality(self):
+        expr = self._relational()
+        types = [TokenType.EQ, TokenType.NE]
+        while self._check(types):
+            operator = self._consume(types)
+            right = self._relational()
+            expr = BinaryExprAST(operator, expr, right)
+        return expr
+    
+    def _relational(self):
+        expr = self._addition()
+        types = [TokenType.GT, TokenType.GE, TokenType.LT, TokenType.LE]
+        while self._check(types):
+            operator = self._consume(types)
+            right = self._addition()
+            expr = BinaryExprAST(operator, expr, right)
         return expr
 
     def _addition(self):

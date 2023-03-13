@@ -65,6 +65,18 @@ class Interpreter:
                 return lhs % rhs
             case TokenType.EXP:
                 return lhs ** rhs
+            case TokenType.EQ:
+                return lhs == rhs
+            case TokenType.NE:
+                return lhs != rhs
+            case TokenType.LT:
+                return lhs < rhs
+            case TokenType.LE:
+                return lhs <= rhs
+            case TokenType.GT:
+                return lhs > rhs
+            case TokenType.GE:
+                return lhs >= rhs
 
     def visit_unary_expr(self, expr: UnaryExprAST):
         accept = expr.expr.accept(self)
@@ -91,7 +103,7 @@ class Interpreter:
         results = []
         for statement in stmt.stmts:
             accept = statement.accept(self)
-            if accept: # only append if it returns something
+            if accept is bool or accept is not None: # only append if it returns something (not None or bool)
                 results.append(accept)
 
         return results
@@ -106,7 +118,7 @@ class Interpreter:
         results = []
         while stmt.cond.accept(self):
             accept = stmt.body.accept(self)
-            if accept:
+            if accept is bool or accept is not None:
                 results.append(accept)
 
         return results

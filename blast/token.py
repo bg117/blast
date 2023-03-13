@@ -61,6 +61,13 @@ class TokenType(IntEnum):
 
     COLON = auto()      # colon (:) for assignment
 
+    EQ = auto()         # equal to (=)
+    NE = auto()         # not equal to (<>)
+    LT = auto()         # less than (<)
+    LE = auto()         # less than or equal to (<=)
+    GT = auto()         # greater than (>)
+    GE = auto()         # greater than or equal to (>=)
+
     PERIOD = auto()     # period (.) for ending a statement
 
     LPAREN = auto()     # left parenthesis (

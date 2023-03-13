@@ -25,6 +25,12 @@ class Scanner:
         TokenType.DIV: r"(/)",
         TokenType.MOD: r"(%)",
         TokenType.COLON: r"(:)",
+        TokenType.NE: r"(<>)",
+        TokenType.LE: r"(<=)",
+        TokenType.GE: r"(>=)",
+        TokenType.LT: r"(<)",
+        TokenType.GT: r"(>)",
+        TokenType.EQ: r"(=)", # must be before TokenType.LE and TokenType.GE to avoid matching <= and >=
         TokenType.PERIOD: r"(\.)",
         TokenType.LPAREN: r"(\()",
         TokenType.RPAREN: r"(\))",
