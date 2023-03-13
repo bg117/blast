@@ -47,6 +47,9 @@ class Interpreter:
         if expr.op.type == TokenType.COLON:
             if not isinstance(expr.lhs, VariableExprAST):
                 raise Exception("Invalid assignment target")
+            # if rhs is None, throw an error (can't assign None)
+            if rhs is None:
+                raise Exception("Cannot assign None")
             self._symtab.set(expr.lhs.name, SymbolType.VARIABLE, rhs)
             return  # return nothing
 
@@ -125,7 +128,9 @@ class Interpreter:
             # set the symbol table back to the old one
             self._symtab = old_symtab
 
-            return result
+            # return last thing in the array
+            len_of = len(result)
+            return result[len_of - 1] if len_of > 0 else None
         except KeyError:
             raise Exception(f"Undefined function '{expr.name}'")
 
