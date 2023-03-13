@@ -9,3 +9,4 @@ example on how to implement a programming language in Python.
    :maxdepth: 2
 
    usage
+   lang
