@@ -23,24 +23,10 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
-    'autoapi.extension'
 ]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
-autoapi_dirs = ['../blast']
-autoapi_type = 'python'
-autoapi_options = [
-    'members',
-    'undoc-members',
-    # show __init__
-    'show-inheritance',
-    # show __call__
-    'show-module-summary',
-    # show __repr__
-    'show-class-summary',
-]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
