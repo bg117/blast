@@ -1,8 +1,6 @@
 # BLAST
 
-BLAST is a programming language.
-
-Currently, it is only a calculator.
+BLAST is an almost-full-blown programming language. It is a work in progress.
 
 ## Usage
 
@@ -20,4 +18,4 @@ Currently, it is only a calculator.
 
 `blast` is the BLAST API. It is a Python module. Import with `import blast`.
 
-See [the documentation](DOCUMENTATION.md) for more information.
+Documentation is a work in progress.

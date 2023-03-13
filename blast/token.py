@@ -50,7 +50,7 @@ class TokenType(IntEnum):
 
     NUMBER = auto()     # integer
     STRING = auto()     # string
-    IDENTIFIER = auto() # variable name
+    IDENTIFIER = auto()  # variable name
 
     PLUS = auto()       # plus (+)
     MINUS = auto()      # minus (-)

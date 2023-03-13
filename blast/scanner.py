@@ -20,7 +20,8 @@ class Scanner:
         TokenType.STRING: r"\"([^\"]*)\"",
         TokenType.PLUS: r"(\+)",
         TokenType.MINUS: r"(-)",
-        TokenType.EXP: r"(\*\*)", # must be before TokenType.MUL to avoid matching **
+        # must be before TokenType.MUL to avoid matching **
+        TokenType.EXP: r"(\*\*)",
         TokenType.MUL: r"(\*)",
         TokenType.DIV: r"(/)",
         TokenType.MOD: r"(%)",
@@ -30,7 +31,8 @@ class Scanner:
         TokenType.GE: r"(>=)",
         TokenType.LT: r"(<)",
         TokenType.GT: r"(>)",
-        TokenType.EQ: r"(=)", # must be before TokenType.LE and TokenType.GE to avoid matching <= and >=
+        # must be before TokenType.LE and TokenType.GE to avoid matching <= and >=
+        TokenType.EQ: r"(=)",
         TokenType.PERIOD: r"(\.)",
         TokenType.LPAREN: r"(\()",
         TokenType.RPAREN: r"(\))",
@@ -41,7 +43,8 @@ class Scanner:
         TokenType.WHILE: r"(while)",
         TokenType.DO: r"(do)",
         TokenType.ROUTINE: r"(routine)",
-        TokenType.IDENTIFIER: r"(\w+)" # must be last to avoid matching keywords
+        # must be last to avoid matching keywords
+        TokenType.IDENTIFIER: r"(\w+)"
     }
 
     def __init__(self, source: str):

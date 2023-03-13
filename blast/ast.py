@@ -147,7 +147,7 @@ class StringExprAST(ExprAST):
             Any: The result of the visitor's visit_string_expr method.
         """
         return visitor.visit_string_expr(self)
-    
+
 
 class VariableExprAST(ExprAST):
     """AST node representing a variable.
@@ -174,7 +174,7 @@ class VariableExprAST(ExprAST):
             Any: The result of the visitor's visit_variable_expr method.
         """
         return visitor.visit_variable_expr(self)
-    
+
 
 class CallExprAST(ExprAST):
     """AST node representing a function call.
@@ -203,7 +203,7 @@ class CallExprAST(ExprAST):
             Any: The result of the visitor's visit_call_expr method.
         """
         return visitor.visit_call_expr(self)
-    
+
 
 class StmtAST(AST):
     """Base class for all statement AST nodes.
@@ -325,7 +325,7 @@ class WhileStmtAST(StmtAST):
             Any: The result of the visitor's visit_while_stmt method.
         """
         return visitor.visit_while_stmt(self)
-    
+
 
 class RoutineStmtAST(StmtAST):
     """AST node representing a function declaration.

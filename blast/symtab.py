@@ -7,10 +7,12 @@ variables and their values. It is a simple implementation of a symbol table.
 from enum import IntEnum, auto
 from typing import Any
 
+
 class SymbolType(IntEnum):
     """The type of a symbol."""
     VARIABLE = auto()
     FUNCTION = auto()
+
 
 class SymbolTable:
     """The symbol table for use by the interpreter."""
@@ -22,7 +24,7 @@ class SymbolTable:
 
     def __repr__(self):
         return f"{self._symbols!r}"
-    
+
     def get(self, name, type):
         """Get the value of a symbol.
 
@@ -42,8 +44,9 @@ class SymbolTable:
             if self._parent is not None:
                 return self._parent.get(name, type)
             else:
-                raise KeyError(f"Symbol {name!r} of type {type!r} does not exist")
-    
+                raise KeyError(
+                    f"Symbol {name!r} of type {type!r} does not exist")
+
     def set(self, name, type, value):
         """Set the value of a symbol.
 
