@@ -159,7 +159,18 @@ class Parser:
             return StringExprAST(self._consume([TokenType.STRING]).lexeme)
         # if the current token is an identifier, return a new VariableExprAST
         elif self._check([TokenType.IDENTIFIER]):
-            return VariableExprAST(self._consume([TokenType.IDENTIFIER]).lexeme)
+            token = self._consume([TokenType.IDENTIFIER])
+            # if next token is a left parenthesis, parse a function call
+            if self._check([TokenType.LPAREN]):
+                self._consume([TokenType.LPAREN])
+                # store all arguments in a list
+                args = []
+                # while the current token is not a right parenthesis, parse the next argument
+                while not self._check([TokenType.RPAREN]):
+                    args.append(self._expression())
+                self._consume([TokenType.RPAREN])
+                return CallExprAST(token.lexeme, args)
+            return VariableExprAST(token.lexeme)
         # if the current token is a left parenthesis, parse the next expression
         elif self._check([TokenType.LPAREN]):
             self._consume([TokenType.LPAREN])

@@ -6,7 +6,7 @@ This module contains the Interpreter class, which is used to interpret a BLAST p
 from .token import Token, TokenType
 from .parser import Parser
 from .ast import *
-from .symtab import SymbolTable
+from .symtab import SymbolTable, SymbolType
 
 
 class Interpreter:
@@ -47,7 +47,7 @@ class Interpreter:
         if expr.op.type == TokenType.COLON:
             if not isinstance(expr.lhs, VariableExprAST):
                 raise Exception("Invalid assignment target")
-            self._symtab[expr.lhs.name] = rhs
+            self._symtab.set(expr.lhs.name, SymbolType.VARIABLE, rhs)
             return # return nothing
 
         lhs = expr.lhs.accept(self)
@@ -92,9 +92,41 @@ class Interpreter:
     
     def visit_variable_expr(self, expr: VariableExprAST):
         try:
-            return self._symtab[expr.name]
+            return self._symtab.get(expr.name, SymbolType.VARIABLE)
         except KeyError:
             raise Exception(f"Undefined variable '{expr.name}'")
+        
+    def visit_call_expr(self, expr: CallExprAST):
+        try:
+            # if print function, print the args
+            if expr.name == "print":
+                print(*[arg.accept(self) for arg in expr.args], sep=" ")
+                return # return nothing
+
+            func = self._symtab.get(expr.name, SymbolType.FUNCTION)
+            # create new symbol table for function
+            symtab = SymbolTable(parent=self._symtab)
+            # func.args is a list of str (names of args); map to expr.args
+            # but first, check if the number of args is correct
+            if len(func.args) != len(expr.args):
+                raise Exception(f"Invalid number of arguments for function '{expr.name}': expected {len(func.args)}, got {len(expr.args)}")
+            # now, map the args
+            for arg, val in zip(func.args, expr.args):
+                symtab.set(arg, SymbolType.VARIABLE, val.accept(self))
+
+            # set the symbol table to the new one
+            old_symtab = self._symtab
+            self._symtab = symtab
+
+            # evaluate the function
+            result = func.body.accept(self)
+
+            # set the symbol table back to the old one
+            self._symtab = old_symtab
+
+            return result
+        except KeyError:
+            raise Exception(f"Undefined function '{expr.name}'")
         
     def visit_expr_stmt(self, stmt: ExprStmtAST):
         return stmt.expr.accept(self)

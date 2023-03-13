@@ -176,6 +176,35 @@ class VariableExprAST(ExprAST):
         return visitor.visit_variable_expr(self)
     
 
+class CallExprAST(ExprAST):
+    """AST node representing a function call.
+    """
+
+    def __init__(self, name, args):
+        """Initialize a CallExprAST.
+
+        Args:
+            name (str): The name of the function.
+            args (list[ExprAST]): The arguments to the function.
+        """
+        self.name = name
+        self.args = args
+
+    def __repr__(self):
+        return f"<{self.name!r} {self.args!r}>"
+
+    def accept(self, visitor):
+        """Accept a visitor.
+
+        Args:
+            visitor (Any): The visitor to accept.
+
+        Returns:
+            Any: The result of the visitor's visit_call_expr method.
+        """
+        return visitor.visit_call_expr(self)
+    
+
 class StmtAST(AST):
     """Base class for all statement AST nodes.
     """
