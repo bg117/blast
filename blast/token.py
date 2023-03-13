@@ -70,3 +70,6 @@ class TokenType(IntEnum):
     THEN = auto()       # then keyword
     ELSE = auto()       # else keyword
     END = auto()        # end keyword
+
+    WHILE = auto()      # while keyword
+    DO = auto()         # do keyword

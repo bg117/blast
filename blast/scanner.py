@@ -32,6 +32,8 @@ class Scanner:
         TokenType.THEN: r"(then)",
         TokenType.ELSE: r"(else)",
         TokenType.END: r"(end)",
+        TokenType.WHILE: r"(while)",
+        TokenType.DO: r"(do)",
         TokenType.IDENTIFIER: r"(\w+)" # must be last to avoid matching keywords
     }
 
