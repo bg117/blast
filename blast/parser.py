@@ -191,18 +191,20 @@ class Parser:
     def _statement(self):
         # if current token is "if", parse an if statement
         if self._check([TokenType.IF]):
-            return self._if_statement()
+            expr = self._if_statement()
         elif self._check([TokenType.WHILE]):
-            return self._while_statement()
+            expr = self._while_statement()
         elif self._check([TokenType.ROUTINE]):
-            return self._routine_statement()
+            expr = self._routine_statement()
         else:
-            return self._expression_statement()
+            expr = self._expression_statement()
+
+        # consume period
+        self._consume([TokenType.PERIOD])
+        return expr
 
     def _expression_statement(self):
         stmt = ExprStmtAST(self._expression())
-        self._consume([TokenType.PERIOD])
-
         return stmt
 
     def _if_statement(self):

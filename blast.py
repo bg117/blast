@@ -45,6 +45,9 @@ def repl():
                     break
                 # append line to list of lines
                 lines.append(line)
+                # if single line and (when trimmed) ends with '.', break
+                if len(lines) == 1 and line.strip().endswith('.'):
+                    break
             except EOFError:
                 break
             except KeyboardInterrupt:
