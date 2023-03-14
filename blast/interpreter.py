@@ -51,7 +51,7 @@ class Interpreter:
             if rhs is None:
                 raise Exception("Cannot assign None")
             self._symtab.set(expr.lhs.name, SymbolType.VARIABLE, rhs)
-            return  # return nothing
+            return rhs # return the value assigned (for chaining)
 
         lhs = expr.lhs.accept(self)
 

@@ -1,7 +1,9 @@
 API Documentation
 =================
 
-.. autodoc::
+.. autosummary::
    :toctree: generated/
+   :recursive:
+   :members:
 
    blast
