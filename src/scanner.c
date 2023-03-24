@@ -1,7 +1,10 @@
 #include "scanner.h"
 
 #include <ctype.h>
+#include <regex.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "key_value_pair.h"
@@ -48,6 +51,50 @@ void skip_whitespace(struct scanner *scanner)
 {
     // while not at end of source and current character is whitespace
     while (!is_at_end(scanner) && isspace(scanner->src[scanner->i]))
+        scanner->i++; // skip current character
+}
+
+void scan_single(struct scanner *scanner, struct token **tokens, int *num_tokens)
+{
+    // skip whitespace
+    skip_whitespace(scanner);
+
+    // if at end of source, return
+    if (is_at_end(scanner))
+        return;
+
+    // for each pattern
+    for (int i = 0; i < sizeof(PATTERNS) / sizeof(PATTERNS[0]); i++)
+    {
+        regex_t    regex;
+        regmatch_t match;
+        regcomp(&regex, PATTERNS[i].value, REG_EXTENDED); // compile regex
+
+        // substring of source from current position
+        char *substring = scanner->src + scanner->i;
+
+        // if not match, continue
+        if (regexec(&regex, substring, 1, &match, 0) != 0)
+            continue;
+
+        // if match, add token to token s
+        char *lexeme = malloc(match.rm_eo - match.rm_so + 1); // allocate memory for lexeme (plus null terminator)
+        strncpy(lexeme, substring + match.rm_so, match.rm_eo - match.rm_so); // copy lexeme from source
+        lexeme[match.rm_eo - match.rm_so] = '\0';                            // null terminate lexeme
+
+        struct token token = {
+            .type   = PATTERNS[i].key,
+            .lexeme = lexeme,
+        };
+
+        *tokens = realloc(*tokens, sizeof(struct token) * (*num_tokens + 1)); // allocate memory for new token
+        (*tokens)[*num_tokens] = token;                                       // add token to tokens
+        (*num_tokens)++;                                                      // increment number of tokens
+    }
+
+    // if no pattern matches, error
+    fprintf(stderr, "error: unexpected character '%c'", scanner->src[scanner->i]);
+    if (!is_at_end(scanner))
         scanner->i++; // skip current character
 }
 
