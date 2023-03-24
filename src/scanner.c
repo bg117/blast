@@ -3,7 +3,7 @@
 #include "key_value_pair.h"
 #include "token.h"
 
-struct key_value_pair patterns[] = {
+const struct key_value_pair PATTERNS[] = {
     { NUMBER, "(\\d+(?:\\.\\d+)?)" },
     { STRING, "\"([^\"]*)\"" },
     { PLUS, "(\\+)" },
