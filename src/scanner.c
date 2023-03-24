@@ -1,5 +1,8 @@
 #include "scanner.h"
 
+#include <stdbool.h>
+#include <string.h>
+
 #include "key_value_pair.h"
 #include "token.h"
 
@@ -34,3 +37,12 @@ const struct key_value_pair PATTERNS[] = {
     /* must be last to avoid matching keywords */
     { IDENTIFIER, "(\\w+)" },
 };
+
+bool is_at_end(struct scanner *scanner)
+{
+    return scanner->i >= strlen(scanner->src);
+}
+
+void scanner_scan(struct scanner *scanner, struct token *tokens)
+{
+}
