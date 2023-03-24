@@ -6,7 +6,7 @@
  */
 enum token_type
 {
-    EOF, /* end of file */
+    END_OF_FILE,
 
     NUMBER,     /* integer */
     STRING,     /* string */
@@ -51,8 +51,9 @@ enum token_type
  * that have a meaning in the programming language. For example, the token '1' is a
  * NUMBER token, and the token '+' is a PLUS token.
  */
-struct token {
-    int type;
+struct token
+{
+    int   type;
     char *lexeme;
 };
 
