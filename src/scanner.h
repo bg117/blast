@@ -11,6 +11,8 @@ struct scanner {
     int i;
 };
 
+struct token;
+
 /**
  * @brief Scans all tokens from the given source code.
  *
