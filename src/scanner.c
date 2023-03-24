@@ -98,11 +98,12 @@ void scan_single(struct scanner *scanner, struct token **tokens, int *num_tokens
         scanner->i++; // skip current character
 }
 
-void scanner_scan(struct scanner *scanner, struct token *tokens)
+struct token *scanner_scan(struct scanner *scanner, int *num_tokens)
 {
-    int num_tokens = 0;
+    *num_tokens          = 0;    // no tokens yet
+    struct token *tokens = NULL; // scan_single will call realloc to allocate memory for tokens
 
     // while not at end of source
     while (!is_at_end(scanner))
-        scan_single(scanner, &tokens, &num_tokens); // scan single token
+        scan_single(scanner, &tokens, num_tokens); // scan single token
 }

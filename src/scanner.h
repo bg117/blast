@@ -6,9 +6,10 @@
  *
  * A scanner is a data structure that reads a string and returns tokens.
  */
-struct scanner {
+struct scanner
+{
     char *src;
-    int i;
+    int   i;
 };
 
 struct token;
@@ -17,11 +18,9 @@ struct token;
  * @brief Scans all tokens from the given source code.
  *
  * @param scanner The scanner to use.
- * @param tokens The array of tokens to store the scanned tokens in.
- * @return The number of tokens scanned.
- *
- * @remark The tokens array must be large enough to store all tokens.
+ * @param num_tokens The number of tokens scanned.
+ * @return The tokens scanned.
  */
-void scanner_scan(struct scanner *scanner, struct token *tokens);
+struct token *scanner_scan(struct scanner *scanner, int *num_tokens);
 
 #endif
