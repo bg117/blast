@@ -1,5 +1,6 @@
 #include "scanner.h"
 
+#include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -41,6 +42,13 @@ const struct key_value_pair PATTERNS[] = {
 bool is_at_end(struct scanner *scanner)
 {
     return scanner->i >= strlen(scanner->src);
+}
+
+void skip_whitespace(struct scanner *scanner)
+{
+    // while not at end of source and current character is whitespace
+    while (!is_at_end(scanner) && isspace(scanner->src[scanner->i]))
+        scanner->i++; // skip current character
 }
 
 void scanner_scan(struct scanner *scanner, struct token *tokens)
