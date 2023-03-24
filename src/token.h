@@ -44,4 +44,16 @@ enum token_type
     ROUTINE, /* routine keyword (for defining a function) */
 };
 
+/**
+ * @brief Struct representing a token.
+ *
+ * A token is a lexical unit of a programming language. It is a sequence of characters
+ * that have a meaning in the programming language. For example, the token '1' is a
+ * NUMBER token, and the token '+' is a PLUS token.
+ */
+struct token {
+    int type;
+    char *lexeme;
+};
+
 #endif
