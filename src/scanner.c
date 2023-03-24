@@ -106,4 +106,6 @@ struct token *scanner_scan(struct scanner *scanner, int *num_tokens)
     // while not at end of source
     while (!is_at_end(scanner))
         scan_single(scanner, &tokens, num_tokens); // scan single token
+
+    return tokens;
 }
