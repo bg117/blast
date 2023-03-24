@@ -100,4 +100,9 @@ void scan_single(struct scanner *scanner, struct token **tokens, int *num_tokens
 
 void scanner_scan(struct scanner *scanner, struct token *tokens)
 {
+    int num_tokens = 0;
+
+    // while not at end of source
+    while (!is_at_end(scanner))
+        scan_single(scanner, &tokens, &num_tokens); // scan single token
 }
