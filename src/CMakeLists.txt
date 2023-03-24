@@ -5,4 +5,5 @@ add_executable(blast
     token.h
     key_value_pair.h
     scanner.h
+    scanner.c
 )
