@@ -5,6 +5,15 @@
 #include "ast.h"
 #include "token.h"
 
+static void visit_expr_number(struct ast *ast, int depth);
+static void visit_expr_string(struct ast *ast, int depth);
+static void visit_expr_variable(struct ast *ast, int depth);
+static void visit_expr_binary(struct ast *ast, int depth);
+static void visit_expr_unary(struct ast *ast, int depth);
+static void visit_expr_call(struct ast *ast, int depth);
+
+static void visit(struct ast *ast, int depth);
+
 static void visit_expr_number(struct ast *ast, int depth)
 {
     printf("%*s%f", depth * 2, " ", ast->expr.number.value);
