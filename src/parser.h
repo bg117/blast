@@ -18,6 +18,12 @@ struct parser
     int i;
 };
 
+/**
+ * @brief Parses the given tokens and returns an AST.
+ *
+ * @param parser The parser to use.
+ * @return struct ast* The root node of the AST.
+ */
 struct ast *parser_parse(struct parser *parser);
 
 #endif
