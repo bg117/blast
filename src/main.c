@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include "ast.h"
+#include "parser.h"
 #include "scanner.h"
 #include "token.h"
 
@@ -13,4 +15,9 @@ int main(int argc, char **argv)
 
     for (int i = 0; i < num_tokens; i++)
         printf("%d: %s\n", tokens[i].type, tokens[i].lexeme);
+
+    struct parser parser = { tokens, num_tokens };
+    struct ast   *ast    = parser_parse(&parser);
+
+    return 0;
 }

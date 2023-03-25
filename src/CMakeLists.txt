@@ -8,4 +8,5 @@ add_executable(blast
     scanner.c
     ast.h
     parser.h
+    parser.c
 )
