@@ -9,4 +9,6 @@ add_executable(blast
     ast.h
     parser.h
     parser.c
+    ast_printer.h
+    ast_printer.c
 )

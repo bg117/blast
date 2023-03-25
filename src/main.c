@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "ast.h"
+#include "ast_printer.h"
 #include "parser.h"
 #include "scanner.h"
 #include "token.h"
@@ -18,6 +19,8 @@ int main(int argc, char **argv)
 
     struct parser parser = { tokens, num_tokens };
     struct ast   *ast    = parser_parse(&parser);
+
+    ast_printer(ast);
 
     return 0;
 }
