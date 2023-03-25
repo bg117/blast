@@ -106,6 +106,25 @@ struct ast *expr_unary(struct parser *parser)
     return expr_primary(parser);
 }
 
+struct ast *expr_exponent(struct parser *parser)
+{
+    struct ast *ast = expr_unary(parser); // parse unary expression
+
+    if (check(parser, (int[]){ TOKEN_EXP }, 1)) // while current token is exponent
+    {
+        struct token *token    = consume(parser, (int[]){ TOKEN_EXP }, 1); // consume exponent token
+        struct ast   *rhs      = expr_exponent(parser);                    // right-recurse exponent expression
+        struct ast   *lhs      = ast;                                      // save initial ast
+        ast                    = malloc(sizeof(struct ast));               // allocate memory for new ast
+        ast->type              = AST_EXPR_BINARY;                          // binary ast
+        ast->expr.binary.op    = token->type;                              // set ast operator
+        ast->expr.binary.left  = lhs;                                      // set ast left hand side
+        ast->expr.binary.right = rhs;                                      // set ast right hand side
+    }
+
+    return ast;
+}
+
 struct ast *parser_parse(void)
 {
     struct ast *root = malloc(sizeof(struct ast));
