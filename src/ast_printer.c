@@ -15,6 +15,11 @@ static void visit_expr_string(struct ast *ast, int depth)
     printf("%*s\"%s\"", depth * 2, " ", ast->expr.string.value);
 }
 
+static void visit_expr_variable(struct ast *ast, int depth)
+{
+    printf("%*s%s", depth * 2, " ", ast->expr.variable.name);
+}
+
 void ast_printer(struct ast *ast)
 {
 
