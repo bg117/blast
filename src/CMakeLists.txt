@@ -6,4 +6,5 @@ add_executable(blast
     key_value_pair.h
     scanner.h
     scanner.c
+    ast.h
 )
