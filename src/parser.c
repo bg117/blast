@@ -1,6 +1,7 @@
 #include "parser.h"
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "ast.h"
@@ -73,6 +74,36 @@ struct ast *expr_variable(struct parser *parser)
     ast->type               = AST_EXPR_VARIABLE;                               // variable ast
     ast->expr.variable.name = token->lexeme;                                   // set ast name
     return ast;
+}
+
+struct ast *expr_primary(struct parser *parser)
+{
+    if (check(parser, (int[]){ TOKEN_NUMBER }, 1)) // if current token is number
+        return expr_number(parser);                // parse number expression
+
+    if (check(parser, (int[]){ TOKEN_STRING }, 1)) // if current token is string
+        return expr_string(parser);                // parse string expression
+
+    if (check(parser, (int[]){ TOKEN_IDENTIFIER }, 1)) // if current token is variable
+        return expr_variable(parser);                  // parse variable expression
+
+    fprintf(stderr, "error: expected expression\n");
+    return NULL;
+}
+
+struct ast *expr_unary(struct parser *parser)
+{
+    if (check(parser, (int[]){ TOKEN_MINUS }, 1)) // if current token is minus
+    {
+        struct token *token  = consume(parser, (int[]){ TOKEN_MINUS }, 1); // consume minus token
+        struct ast   *ast    = malloc(sizeof(struct ast));                 // allocate memory for ast
+        ast->type            = AST_EXPR_UNARY;                             // unary ast
+        ast->expr.unary.op   = token->type;                                // set ast operator
+        ast->expr.unary.expr = expr_unary(parser);                         // set ast right hand side
+        return ast;
+    }
+
+    return expr_primary(parser);
 }
 
 struct ast *parser_parse(void)
