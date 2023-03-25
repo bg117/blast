@@ -16,32 +16,45 @@ static void visit(struct ast *ast, int depth);
 
 static void visit_expr_number(struct ast *ast, int depth)
 {
-    printf("%*s%f", depth * 2, " ", ast->expr.number.value);
+    printf("%f", ast->expr.number.value);
 }
 
 static void visit_expr_string(struct ast *ast, int depth)
 {
-    printf("%*s\"%s\"", depth * 2, " ", ast->expr.string.value);
+    printf("\"%s\"", ast->expr.string.value);
 }
 
 static void visit_expr_variable(struct ast *ast, int depth)
 {
-    printf("%*s%s", depth * 2, " ", ast->expr.variable.name);
+    printf("%s", ast->expr.variable.name);
 }
 
 static void visit_expr_binary(struct ast *ast, int depth)
 {
-    printf("%*s()", depth * 2, " "); // TODO: print nodes
+    printf("(");
+    visit(ast->expr.binary.left, depth + 1);
+    printf(" %s ", ast->expr.binary.op.lexeme);
+    visit(ast->expr.binary.right, depth + 1);
+    printf(")");
 }
 
 static void visit_expr_unary(struct ast *ast, int depth)
 {
-    printf("%*s()", depth * 2, " "); // TODO: print nodes
+    printf("(");
+    printf("%s", ast->expr.unary.op.lexeme);
+    visit(ast->expr.unary.expr, depth + 1);
+    printf(")");
 }
 
 static void visit_expr_call(struct ast *ast, int depth)
 {
-    printf("%*s()", depth * 2, " "); // TODO: print nodes
+    printf("%s(", ast->expr.call.name);
+    for (int i = 0; i < ast->expr.call.num_args; i++)
+    {
+        visit(ast->expr.call.args[i], depth + 1);
+        printf(" ");
+    }
+    printf(")");
 }
 
 static void visit(struct ast *ast, int depth)

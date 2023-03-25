@@ -1,6 +1,8 @@
 #ifndef AST_H
 #define AST_H
 
+#include "token.h"
+
 /**
  * @brief Enum representing the different types of AST nodes.
  */
@@ -27,9 +29,9 @@ enum ast_type
  */
 struct ast_expr_binary
 {
-    int         op; /* token type */
-    struct ast *left;
-    struct ast *right;
+    struct token op;
+    struct ast  *left;
+    struct ast  *right;
 };
 
 /**
@@ -39,8 +41,8 @@ struct ast_expr_binary
  */
 struct ast_expr_unary
 {
-    int         op; /* token type */
-    struct ast *expr;
+    struct token op;
+    struct ast  *expr;
 };
 
 /**
@@ -74,6 +76,7 @@ struct ast_expr_call
 {
     char        *name;
     struct ast **args;
+    int          num_args;
 };
 
 /**
@@ -90,6 +93,7 @@ struct ast_stmt_expr
 struct ast_stmt_block
 {
     struct ast **stmts;
+    int          num_stmts;
 };
 
 /**
@@ -118,6 +122,7 @@ struct ast_stmt_routine
 {
     char       *name;
     char      **params;
+    int         num_params;
     struct ast *body;
 };
 

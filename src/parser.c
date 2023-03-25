@@ -98,7 +98,7 @@ static struct ast *expr_unary(struct parser *parser)
         struct token *token  = consume(parser, (int[]){ TOKEN_MINUS }, 1); // consume minus token
         struct ast   *ast    = malloc(sizeof(struct ast));                 // allocate memory for ast
         ast->type            = AST_EXPR_UNARY;                             // unary ast
-        ast->expr.unary.op   = token->type;                                // set ast operator
+        ast->expr.unary.op   = *token;                                     // set ast operator
         ast->expr.unary.expr = expr_unary(parser);                         // set ast right hand side
         return ast;
     }
@@ -117,7 +117,7 @@ static struct ast *expr_exponent(struct parser *parser)
         struct ast   *lhs      = ast;                                      // save initial ast
         ast                    = malloc(sizeof(struct ast));               // allocate memory for new ast
         ast->type              = AST_EXPR_BINARY;                          // binary ast
-        ast->expr.binary.op    = token->type;                              // set ast operator
+        ast->expr.binary.op    = *token;                                   // set ast operator
         ast->expr.binary.left  = lhs;                                      // set ast left hand side
         ast->expr.binary.right = rhs;                                      // set ast right hand side
     }
@@ -137,7 +137,7 @@ static struct ast *expr_multiplicative(struct parser *parser)
         struct ast   *lhs      = ast;                        // save initial ast
         ast                    = malloc(sizeof(struct ast)); // allocate memory for new ast
         ast->type              = AST_EXPR_BINARY;            // binary ast
-        ast->expr.binary.op    = token->type;                // set ast operator
+        ast->expr.binary.op    = *token;                     // set ast operator
         ast->expr.binary.left  = lhs;                        // set ast left hand side
         ast->expr.binary.right = rhs;                        // set ast right hand side
     }
@@ -157,7 +157,7 @@ static struct ast *expr_additive(struct parser *parser)
         struct ast   *lhs      = ast;                         // save initial ast
         ast                    = malloc(sizeof(struct ast));  // allocate memory for new ast
         ast->type              = AST_EXPR_BINARY;             // binary ast
-        ast->expr.binary.op    = token->type;                 // set ast operator
+        ast->expr.binary.op    = *token;                      // set ast operator
         ast->expr.binary.left  = lhs;                         // set ast left hand side
         ast->expr.binary.right = rhs;                         // set ast right hand side
     }
@@ -179,7 +179,7 @@ static struct ast *expr_relational(struct parser *parser)
         struct ast   *lhs      = ast;                        // save initial ast
         ast                    = malloc(sizeof(struct ast)); // allocate memory for new ast
         ast->type              = AST_EXPR_BINARY;            // binary ast
-        ast->expr.binary.op    = token->type;                // set ast operator
+        ast->expr.binary.op    = *token;                     // set ast operator
         ast->expr.binary.left  = lhs;                        // set ast left hand side
         ast->expr.binary.right = rhs;                        // set ast right hand side
     }
@@ -199,7 +199,7 @@ static struct ast *expr_equality(struct parser *parser)
         struct ast   *lhs      = ast;                        // save initial ast
         ast                    = malloc(sizeof(struct ast)); // allocate memory for new ast
         ast->type              = AST_EXPR_BINARY;            // binary ast
-        ast->expr.binary.op    = token->type;                // set ast operator
+        ast->expr.binary.op    = *token;                     // set ast operator
         ast->expr.binary.left  = lhs;                        // set ast left hand side
         ast->expr.binary.right = rhs;                        // set ast right hand side
     }
@@ -218,7 +218,7 @@ static struct ast *expr_assignment(struct parser *parser)
         struct ast   *lhs      = ast;                                        // save initial ast
         ast                    = malloc(sizeof(struct ast));                 // allocate memory for new ast
         ast->type              = AST_EXPR_BINARY;                            // binary ast
-        ast->expr.binary.op    = token->type;                                // set ast operator
+        ast->expr.binary.op    = *token;                                     // set ast operator
         ast->expr.binary.left  = lhs;                                        // set ast left hand side
         ast->expr.binary.right = rhs;                                        // set ast right hand side
     }
