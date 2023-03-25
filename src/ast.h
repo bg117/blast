@@ -132,20 +132,24 @@ struct ast
 {
     int type;
     union {
-        struct ast_expr_binary   binary;
-        struct ast_expr_unary    unary;
-        struct ast_expr_number   number;
-        struct ast_expr_string   string;
-        struct ast_expr_variable variable;
-        struct ast_expr_call     call;
-    } expr;
-    union {
-        struct ast_stmt_expr    expr;
-        struct ast_stmt_block   block;
-        struct ast_stmt_if      if_;
-        struct ast_stmt_while   while_;
-        struct ast_stmt_routine routine;
-    } stmt;
+        struct
+        {
+            struct ast_expr_binary   binary;
+            struct ast_expr_unary    unary;
+            struct ast_expr_number   number;
+            struct ast_expr_string   string;
+            struct ast_expr_variable variable;
+            struct ast_expr_call     call;
+        } expr;
+        struct
+        {
+            struct ast_stmt_expr    expr;
+            struct ast_stmt_block   block;
+            struct ast_stmt_if      if_;
+            struct ast_stmt_while   while_;
+            struct ast_stmt_routine routine;
+        } stmt;
+    };
 };
 
 #endif
