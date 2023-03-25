@@ -187,6 +187,26 @@ struct ast *expr_relational(struct parser *parser)
     return ast;
 }
 
+struct ast *expr_equality(struct parser *parser)
+{
+    struct ast *ast     = expr_relational(parser); // parse relational expression
+    int         types[] = { TOKEN_EQ, TOKEN_NE };
+
+    while (check(parser, types, 2)) // while current token is = or <>
+    {
+        struct token *token    = consume(parser, types, 2);  // consume aforementioned tokens
+        struct ast   *rhs      = expr_relational(parser);    // parse inner relational expression
+        struct ast   *lhs      = ast;                        // save initial ast
+        ast                    = malloc(sizeof(struct ast)); // allocate memory for new ast
+        ast->type              = AST_EXPR_BINARY;            // binary ast
+        ast->expr.binary.op    = token->type;                // set ast operator
+        ast->expr.binary.left  = lhs;                        // set ast left hand side
+        ast->expr.binary.right = rhs;                        // set ast right hand side
+    }
+
+    return ast;
+}
+
 struct ast *parser_parse(void)
 {
     struct ast *root = malloc(sizeof(struct ast));
