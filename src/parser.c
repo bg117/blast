@@ -7,46 +7,28 @@
 #include "ast.h"
 #include "token.h"
 
-#define SIZE(array) (sizeof(array) / sizeof((array)[0]))
+static bool          is_at_end(struct parser *parser);
+static struct token *peek(struct parser *parser);
+static bool          check(struct parser *parser, int *types, int num_types);
+static void          advance(struct parser *parser);
+static struct token *consume(struct parser *parser, int *types, int num_types);
 
-static bool is_at_end(struct parser *parser)
+static struct ast *expr_number(struct parser *parser);
+static struct ast *expr_string(struct parser *parser);
+static struct ast *expr_variable(struct parser *parser);
+static struct ast *expr_primary(struct parser *parser);
+static struct ast *expr_unary(struct parser *parser);
+static struct ast *expr_exponent(struct parser *parser);
+static struct ast *expr_multiplicative(struct parser *parser);
+static struct ast *expr_additive(struct parser *parser);
+static struct ast *expr_relational(struct parser *parser);
+static struct ast *expr_equality(struct parser *parser);
+static struct ast *expr_assignment(struct parser *parser);
+static struct ast *expr(struct parser *parser);
+
+struct ast *parser_parse(struct parser *parser)
 {
-    return parser->i >= parser->num_tokens; // current token is last token
-}
-
-static struct token *peek(struct parser *parser)
-{
-    return &parser->tokens[parser->i]; // reference to current token
-}
-
-static bool check(struct parser *parser, int *types, int num_types)
-{
-    if (is_at_end(parser))
-        return false;
-
-    for (int i = 0; i < num_types; i++)     // for each type
-        if (peek(parser)->type == types[i]) // if current token is one of the types
-            return true;                    // return true
-
-    return false; // current token is not one of the types
-}
-
-static void advance(struct parser *parser)
-{
-    if (!is_at_end(parser))
-        parser->i++;
-}
-
-static struct token *consume(struct parser *parser, int *types, int num_types)
-{
-    if (check(parser, types, num_types)) // if current token is one of the types
-    {
-        struct token *token = peek(parser); // reference to current token
-        advance(parser);                    // advance to next token
-        return token;                       // return reference to current token
-    }
-
-    return NULL;
+    return expr(parser);
 }
 
 static struct ast *expr_number(struct parser *parser)
@@ -86,6 +68,14 @@ static struct ast *expr_primary(struct parser *parser)
 
     if (check(parser, (int[]){ TOKEN_IDENTIFIER }, 1)) // if current token is variable
         return expr_variable(parser);                  // parse variable expression
+
+    if (check(parser, (int[]){ TOKEN_LPAREN }, 1)) // if current token is left parenthesis
+    {
+        consume(parser, (int[]){ TOKEN_LPAREN }, 1); // consume left parenthesis token
+        struct ast *ast = expr(parser);              // parse expression
+        consume(parser, (int[]){ TOKEN_RPAREN }, 1); // consume right parenthesis token
+        return ast;
+    }
 
     fprintf(stderr, "error: expected expression\n");
     return NULL;
@@ -231,7 +221,42 @@ static struct ast *expr(struct parser *parser)
     return expr_assignment(parser);
 }
 
-struct ast *parser_parse(struct parser *parser)
+static bool is_at_end(struct parser *parser)
 {
-    return expr(parser);
+    return parser->i >= parser->num_tokens; // current token is last token
+}
+
+static struct token *peek(struct parser *parser)
+{
+    return &parser->tokens[parser->i]; // reference to current token
+}
+
+static bool check(struct parser *parser, int *types, int num_types)
+{
+    if (is_at_end(parser))
+        return false;
+
+    for (int i = 0; i < num_types; i++)     // for each type
+        if (peek(parser)->type == types[i]) // if current token is one of the types
+            return true;                    // return true
+
+    return false; // current token is not one of the types
+}
+
+static void advance(struct parser *parser)
+{
+    if (!is_at_end(parser))
+        parser->i++;
+}
+
+static struct token *consume(struct parser *parser, int *types, int num_types)
+{
+    if (check(parser, types, num_types)) // if current token is one of the types
+    {
+        struct token *token = peek(parser); // reference to current token
+        advance(parser);                    // advance to next token
+        return token;                       // return reference to current token
+    }
+
+    return NULL;
 }

@@ -8,11 +8,13 @@
 
 int main(int argc, char **argv)
 {
-    char          *src     = "1 + 2 * 3";
-    struct scanner scanner = { src };
+    char buf[1024];
+    printf(">>> ");
+    fgets(buf, 1024, stdin); // read a line from stdin
 
-    int           num_tokens;
-    struct token *tokens = scanner_scan(&scanner, &num_tokens);
+    struct scanner scanner = { buf };
+    int            num_tokens;
+    struct token  *tokens = scanner_scan(&scanner, &num_tokens);
 
     for (int i = 0; i < num_tokens; i++)
         printf("%d: %s\n", tokens[i].type, tokens[i].lexeme);
