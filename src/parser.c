@@ -125,6 +125,26 @@ struct ast *expr_exponent(struct parser *parser)
     return ast;
 }
 
+struct ast *expr_multiplicative(struct parser *parser)
+{
+    struct ast *ast     = expr_exponent(parser); // parse exponent expression
+    int         types[] = { TOKEN_MUL, TOKEN_DIV };
+
+    while (check(parser, types, 2)) // while current token is star or slash
+    {
+        struct token *token    = consume(parser, types, 2);  // consume star or slash token
+        struct ast   *rhs      = expr_exponent(parser);      // parse inner exponent expression
+        struct ast   *lhs      = ast;                        // save initial ast
+        ast                    = malloc(sizeof(struct ast)); // allocate memory for new ast
+        ast->type              = AST_EXPR_BINARY;            // binary ast
+        ast->expr.binary.op    = token->type;                // set ast operator
+        ast->expr.binary.left  = lhs;                        // set ast left hand side
+        ast->expr.binary.right = rhs;                        // set ast right hand side
+    }
+
+    return ast;
+}
+
 struct ast *parser_parse(void)
 {
     struct ast *root = malloc(sizeof(struct ast));
