@@ -106,7 +106,7 @@ static void scan_single(struct scanner *scanner, struct token **tokens, int *num
     }
 
     // if no pattern matches, error
-    fprintf(stderr, "error: unexpected character '%c'", scanner->src[scanner->i]);
+    fprintf(stderr, "error: unexpected character '%c'\n", scanner->src[scanner->i]);
     if (!is_at_end(scanner))
         scanner->i++; // skip current character
 }
