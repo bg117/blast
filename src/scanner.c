@@ -10,7 +10,7 @@
 #include "key_value_pair.h"
 #include "token.h"
 
-const struct key_value_pair PATTERNS[] = {
+static const struct key_value_pair PATTERNS[] = {
     { TOKEN_NUMBER, "^[0-9]+(\\.[0-9]+)?" },
     { TOKEN_STRING, "^\"[^\"]*\"" },
     { TOKEN_PLUS, "^\\+" },
@@ -42,19 +42,19 @@ const struct key_value_pair PATTERNS[] = {
     { TOKEN_IDENTIFIER, "^[A-Za-z_$][A-Za-z0-9_$]*" },
 };
 
-bool is_at_end(struct scanner *scanner)
+static bool is_at_end(struct scanner *scanner)
 {
     return scanner->i >= strlen(scanner->src);
 }
 
-void skip_whitespace(struct scanner *scanner)
+static void skip_whitespace(struct scanner *scanner)
 {
     // while not at end of source and current character is whitespace
     while (!is_at_end(scanner) && isspace(scanner->src[scanner->i]))
         scanner->i++; // skip current character
 }
 
-void scan_single(struct scanner *scanner, struct token **tokens, int *num_tokens)
+static void scan_single(struct scanner *scanner, struct token **tokens, int *num_tokens)
 {
     // skip whitespace
     skip_whitespace(scanner);

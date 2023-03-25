@@ -9,17 +9,17 @@
 
 #define SIZE(array) (sizeof(array) / sizeof((array)[0]))
 
-bool is_at_end(struct parser *parser)
+static bool is_at_end(struct parser *parser)
 {
     return parser->i >= parser->num_tokens; // current token is last token
 }
 
-struct token *peek(struct parser *parser)
+static struct token *peek(struct parser *parser)
 {
     return &parser->tokens[parser->i]; // reference to current token
 }
 
-bool check(struct parser *parser, int *types, int num_types)
+static bool check(struct parser *parser, int *types, int num_types)
 {
     if (is_at_end(parser))
         return false;
@@ -31,13 +31,13 @@ bool check(struct parser *parser, int *types, int num_types)
     return false; // current token is not one of the types
 }
 
-void advance(struct parser *parser)
+static void advance(struct parser *parser)
 {
     if (!is_at_end(parser))
         parser->i++;
 }
 
-struct token *consume(struct parser *parser, int *types, int num_types)
+static struct token *consume(struct parser *parser, int *types, int num_types)
 {
     if (check(parser, types, num_types)) // if current token is one of the types
     {
@@ -49,7 +49,7 @@ struct token *consume(struct parser *parser, int *types, int num_types)
     return NULL;
 }
 
-struct ast *expr_number(struct parser *parser)
+static struct ast *expr_number(struct parser *parser)
 {
     struct token *token    = consume(parser, (int[]){ TOKEN_NUMBER }, 1); // consume number token
     struct ast   *ast      = malloc(sizeof(struct ast));                  // allocate memory for ast
@@ -58,7 +58,7 @@ struct ast *expr_number(struct parser *parser)
     return ast;
 }
 
-struct ast *expr_string(struct parser *parser)
+static struct ast *expr_string(struct parser *parser)
 {
     struct token *token    = consume(parser, (int[]){ TOKEN_STRING }, 1); // consume string token
     struct ast   *ast      = malloc(sizeof(struct ast));                  // allocate memory for ast
@@ -67,7 +67,7 @@ struct ast *expr_string(struct parser *parser)
     return ast;
 }
 
-struct ast *expr_variable(struct parser *parser)
+static struct ast *expr_variable(struct parser *parser)
 {
     struct token *token     = consume(parser, (int[]){ TOKEN_IDENTIFIER }, 1); // consume variable token
     struct ast   *ast       = malloc(sizeof(struct ast));                      // allocate memory for ast
@@ -76,7 +76,7 @@ struct ast *expr_variable(struct parser *parser)
     return ast;
 }
 
-struct ast *expr_primary(struct parser *parser)
+static struct ast *expr_primary(struct parser *parser)
 {
     if (check(parser, (int[]){ TOKEN_NUMBER }, 1)) // if current token is number
         return expr_number(parser);                // parse number expression
@@ -91,7 +91,7 @@ struct ast *expr_primary(struct parser *parser)
     return NULL;
 }
 
-struct ast *expr_unary(struct parser *parser)
+static struct ast *expr_unary(struct parser *parser)
 {
     if (check(parser, (int[]){ TOKEN_MINUS }, 1)) // if current token is minus
     {
@@ -106,7 +106,7 @@ struct ast *expr_unary(struct parser *parser)
     return expr_primary(parser);
 }
 
-struct ast *expr_exponent(struct parser *parser)
+static struct ast *expr_exponent(struct parser *parser)
 {
     struct ast *ast = expr_unary(parser); // parse unary expression
 
@@ -125,7 +125,7 @@ struct ast *expr_exponent(struct parser *parser)
     return ast;
 }
 
-struct ast *expr_multiplicative(struct parser *parser)
+static struct ast *expr_multiplicative(struct parser *parser)
 {
     struct ast *ast     = expr_exponent(parser); // parse exponent expression
     int         types[] = { TOKEN_MUL, TOKEN_DIV };
@@ -145,7 +145,7 @@ struct ast *expr_multiplicative(struct parser *parser)
     return ast;
 }
 
-struct ast *expr_additive(struct parser *parser)
+static struct ast *expr_additive(struct parser *parser)
 {
     struct ast *ast     = expr_multiplicative(parser); // parse multiplicative expression
     int         types[] = { TOKEN_PLUS, TOKEN_MINUS };
@@ -165,7 +165,7 @@ struct ast *expr_additive(struct parser *parser)
     return ast;
 }
 
-struct ast *expr_relational(struct parser *parser)
+static struct ast *expr_relational(struct parser *parser)
 {
     struct ast *ast     = expr_additive(parser); // parse additive expression
     int         types[] = { TOKEN_LT, TOKEN_GT, TOKEN_LE, TOKEN_GE };
@@ -187,7 +187,7 @@ struct ast *expr_relational(struct parser *parser)
     return ast;
 }
 
-struct ast *expr_equality(struct parser *parser)
+static struct ast *expr_equality(struct parser *parser)
 {
     struct ast *ast     = expr_relational(parser); // parse relational expression
     int         types[] = { TOKEN_EQ, TOKEN_NE };
@@ -207,7 +207,7 @@ struct ast *expr_equality(struct parser *parser)
     return ast;
 }
 
-struct ast *expr_assignment(struct parser *parser)
+static struct ast *expr_assignment(struct parser *parser)
 {
     struct ast *ast = expr_equality(parser); // parse equality expression
 
@@ -226,7 +226,7 @@ struct ast *expr_assignment(struct parser *parser)
     return ast;
 }
 
-struct ast *expr(struct parser *parser)
+static struct ast *expr(struct parser *parser)
 {
     return expr_assignment(parser);
 }
