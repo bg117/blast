@@ -6,6 +6,8 @@
 #include "ast.h"
 #include "token.h"
 
+#define SIZE(array) (sizeof(array) / sizeof((array)[0]))
+
 bool is_at_end(struct parser *parser)
 {
     return parser->i >= parser->num_tokens; // current token is last token
