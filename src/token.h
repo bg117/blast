@@ -6,42 +6,42 @@
  */
 enum token_type
 {
-    END_OF_FILE,
+    TOKEN_EOF,
 
-    NUMBER,     /* integer */
-    STRING,     /* string */
-    IDENTIFIER, /* variable name */
+    TOKEN_NUMBER,     /* integer */
+    TOKEN_STRING,     /* string */
+    TOKEN_IDENTIFIER, /* variable name */
 
-    PLUS,  /* plus (+) */
-    MINUS, /* minus (-) */
-    MUL,   /* multiplication (*) */
-    DIV,   /* division (/) */
-    MOD,   /* modulo (%) */
-    EXP,   /* exponentiation (**) */
+    TOKEN_PLUS,  /* plus (+) */
+    TOKEN_MINUS, /* minus (-) */
+    TOKEN_MUL,   /* multiplication (*) */
+    TOKEN_DIV,   /* division (/) */
+    TOKEN_MOD,   /* modulo (%) */
+    TOKEN_EXP,   /* exponentiation (**) */
 
-    COLON, /* colon (:) for assignment */
+    TOKEN_COLON, /* colon (:) for assignment */
 
-    EQ, /* equal to (=) */
-    NE, /* not equal to (<>) */
-    LT, /* less than (<) */
-    LE, /* less than or equal to (<=) */
-    GT, /* greater than (>) */
-    GE, /* greater than or equal to (>=) */
+    TOKEN_EQ, /* equal to (=) */
+    TOKEN_NE, /* not equal to (<>) */
+    TOKEN_LT, /* less than (<) */
+    TOKEN_LE, /* less than or equal to (<=) */
+    TOKEN_GT, /* greater than (>) */
+    TOKEN_GE, /* greater than or equal to (>=) */
 
-    PERIOD, /* period (.) for ending a statement */
+    TOKEN_PERIOD, /* period (.) for ending a statement */
 
-    LPAREN, /* left parenthesis ( */
-    RPAREN, /* right parenthesis ) */
+    TOKEN_LPAREN, /* left parenthesis ( */
+    TOKEN_RPAREN, /* right parenthesis ) */
 
-    IF,   /* if keyword */
-    THEN, /* then keyword */
-    ELSE, /* else keyword */
-    END,  /* end keyword */
+    TOKEN_IF,   /* if keyword */
+    TOKEN_THEN, /* then keyword */
+    TOKEN_ELSE, /* else keyword */
+    TOKEN_END,  /* end keyword */
 
-    WHILE, /* while keyword */
-    DO,    /* do keyword */
+    TOKEN_WHILE, /* while keyword */
+    TOKEN_DO,    /* do keyword */
 
-    ROUTINE, /* routine keyword (for defining a function) */
+    TOKEN_ROUTINE, /* routine keyword (for defining a function) */
 };
 
 /**

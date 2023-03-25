@@ -11,35 +11,35 @@
 #include "token.h"
 
 const struct key_value_pair PATTERNS[] = {
-    { NUMBER, "^[0-9]+(\\.[0-9]+)?" },
-    { STRING, "^\"[^\"]*\"" },
-    { PLUS, "^\\+" },
-    { MINUS, "^-" },
+    { TOKEN_NUMBER, "^[0-9]+(\\.[0-9]+)?" },
+    { TOKEN_STRING, "^\"[^\"]*\"" },
+    { TOKEN_PLUS, "^\\+" },
+    { TOKEN_MINUS, "^-" },
     /* must be before MUL to avoid matching ** */
-    { EXP, "^\\*\\*" },
-    { MUL, "^\\*" },
-    { DIV, "^/" },
-    { MOD, "^%" },
-    { COLON, "^:" },
-    { NE, "^<>" },
-    { LE, "^<=" },
-    { GE, "^>=" },
-    { LT, "^<" },
-    { GT, "^>" },
+    { TOKEN_EXP, "^\\*\\*" },
+    { TOKEN_MUL, "^\\*" },
+    { TOKEN_DIV, "^/" },
+    { TOKEN_MOD, "^%" },
+    { TOKEN_COLON, "^:" },
+    { TOKEN_NE, "^<>" },
+    { TOKEN_LE, "^<=" },
+    { TOKEN_GE, "^>=" },
+    { TOKEN_LT, "^<" },
+    { TOKEN_GT, "^>" },
     /* must be before LE and GE to avoid matching <= and >= */
-    { EQ, "^=" },
-    { PERIOD, "^\\." },
-    { LPAREN, "^\\(" },
-    { RPAREN, "^\\)" },
-    { IF, "^if" },
-    { THEN, "^then" },
-    { ELSE, "^else" },
-    { END, "^end" },
-    { WHILE, "^while" },
-    { DO, "^do" },
-    { ROUTINE, "^routine" },
+    { TOKEN_EQ, "^=" },
+    { TOKEN_PERIOD, "^\\." },
+    { TOKEN_LPAREN, "^\\(" },
+    { TOKEN_RPAREN, "^\\)" },
+    { TOKEN_IF, "^if" },
+    { TOKEN_THEN, "^then" },
+    { TOKEN_ELSE, "^else" },
+    { TOKEN_END, "^end" },
+    { TOKEN_WHILE, "^while" },
+    { TOKEN_DO, "^do" },
+    { TOKEN_ROUTINE, "^routine" },
     /* must be last to avoid matching keywords */
-    { IDENTIFIER, "^[A-Za-z_$][A-Za-z0-9_$]*" },
+    { TOKEN_IDENTIFIER, "^[A-Za-z_$][A-Za-z0-9_$]*" },
 };
 
 bool is_at_end(struct scanner *scanner)
@@ -80,7 +80,7 @@ void scan_single(struct scanner *scanner, struct token **tokens, int *num_tokens
         // if match, add token to tokens
         int start = match.rm_so;
         int end   = match.rm_eo;
-        if (PATTERNS[i].key == STRING)
+        if (PATTERNS[i].key == TOKEN_STRING)
         {
             start++; // skip opening quote
             end--;   // skip closing quote
