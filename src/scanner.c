@@ -11,35 +11,35 @@
 #include "token.h"
 
 const struct key_value_pair PATTERNS[] = {
-    { NUMBER, "([0-9]+(\\.[0-9]+)?)" },
-    { STRING, "\"([^\"]*)\"" },
-    { PLUS, "(\\+)" },
-    { MINUS, "(-)" },
+    { NUMBER, "^[0-9]+(\\.[0-9]+)?" },
+    { STRING, "^\"[^\"]*\"" },
+    { PLUS, "^\\+" },
+    { MINUS, "^-" },
     /* must be before MUL to avoid matching ** */
-    { EXP, "(\\*\\*)" },
-    { MUL, "(\\*)" },
-    { DIV, "(/)" },
-    { MOD, "(%)" },
-    { COLON, "(:)" },
-    { NE, "(<>)" },
-    { LE, "(<=)" },
-    { GE, "(>=)" },
-    { LT, "(<)" },
-    { GT, "(>)" },
+    { EXP, "^\\*\\*" },
+    { MUL, "^\\*" },
+    { DIV, "^/" },
+    { MOD, "^%" },
+    { COLON, "^:" },
+    { NE, "^<>" },
+    { LE, "^<=" },
+    { GE, "^>=" },
+    { LT, "^<" },
+    { GT, "^>" },
     /* must be before LE and GE to avoid matching <= and >= */
-    { EQ, "(=)" },
-    { PERIOD, "(\\.)" },
-    { LPAREN, "(\\()" },
-    { RPAREN, "(\\))" },
-    { IF, "(if)" },
-    { THEN, "(then)" },
-    { ELSE, "(else)" },
-    { END, "(end)" },
-    { WHILE, "(while)" },
-    { DO, "(do)" },
-    { ROUTINE, "(routine)" },
+    { EQ, "^=" },
+    { PERIOD, "^\\." },
+    { LPAREN, "^\\(" },
+    { RPAREN, "^\\)" },
+    { IF, "^if" },
+    { THEN, "^then" },
+    { ELSE, "^else" },
+    { END, "^end" },
+    { WHILE, "^while" },
+    { DO, "^do" },
+    { ROUTINE, "^routine" },
     /* must be last to avoid matching keywords */
-    { IDENTIFIER, "([A-Za-z_$][A-Za-z0-9_$]*)" },
+    { IDENTIFIER, "^[A-Za-z_$][A-Za-z0-9_$]*" },
 };
 
 bool is_at_end(struct scanner *scanner)
@@ -77,10 +77,19 @@ void scan_single(struct scanner *scanner, struct token **tokens, int *num_tokens
         if (regexec(&regex, substring, 1, &match, 0) != 0)
             continue;
 
-        // if match, add token to token s
-        char *lexeme = malloc(match.rm_eo - match.rm_so + 1); // allocate memory for lexeme (plus null terminator)
-        strncpy(lexeme, substring + match.rm_so, match.rm_eo - match.rm_so); // copy lexeme from source
-        lexeme[match.rm_eo - match.rm_so] = '\0';                            // null terminate lexeme
+        // if match, add token to tokens
+        int start = match.rm_so;
+        int end   = match.rm_eo;
+        if (PATTERNS[i].key == STRING)
+        {
+            start++; // skip opening quote
+            end--;   // skip closing quote
+        }
+
+        char *lexeme = malloc(end - start + 1); // allocate memory for lexeme (plus null terminator)
+
+        strncpy(lexeme, substring + start, end - start); // copy lexeme from source
+        lexeme[end - start] = '\0';                      // null terminate lexeme
 
         struct token token = {
             .type   = PATTERNS[i].key,
