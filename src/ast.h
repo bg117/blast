@@ -20,46 +20,6 @@ enum ast_type
     AST_STMT_ROUTINE
 };
 
-struct ast_expr_binary;
-struct ast_expr_unary;
-struct ast_expr_number;
-struct ast_expr_string;
-struct ast_expr_variable;
-struct ast_expr_call;
-
-struct ast_stmt_expr;
-struct ast_stmt_block;
-struct ast_stmt_if;
-struct ast_stmt_while;
-struct ast_stmt_routine;
-
-/**
- * @brief Struct representing an AST node.
- *
- * An AST node is a node in an abstract syntax tree. An abstract syntax tree is a
- * representation of the syntax of a programming language. It is a tree data structure
- * where each node represents a syntactic construct of the programming language.
- */
-struct ast
-{
-    int type;
-    union {
-        struct ast_expr_binary   *binary;
-        struct ast_expr_unary    *unary;
-        struct ast_expr_number   *number;
-        struct ast_expr_string   *string;
-        struct ast_expr_variable *variable;
-        struct ast_expr_call     *call;
-    } expr;
-    union {
-        struct ast_stmt_expr    *expr;
-        struct ast_stmt_block   *block;
-        struct ast_stmt_if      *if_;
-        struct ast_stmt_while   *while_;
-        struct ast_stmt_routine *routine;
-    } stmt;
-};
-
 /**
  * @brief Struct representing a binary expression.
  *
@@ -159,6 +119,33 @@ struct ast_stmt_routine
     char       *name;
     char      **params;
     struct ast *body;
+};
+
+/**
+ * @brief Struct representing an AST node.
+ *
+ * An AST node is a node in an abstract syntax tree. An abstract syntax tree is a
+ * representation of the syntax of a programming language. It is a tree data structure
+ * where each node represents a syntactic construct of the programming language.
+ */
+struct ast
+{
+    int type;
+    union {
+        struct ast_expr_binary   binary;
+        struct ast_expr_unary    unary;
+        struct ast_expr_number   number;
+        struct ast_expr_string   string;
+        struct ast_expr_variable variable;
+        struct ast_expr_call     call;
+    } expr;
+    union {
+        struct ast_stmt_expr    expr;
+        struct ast_stmt_block   block;
+        struct ast_stmt_if      if_;
+        struct ast_stmt_while   while_;
+        struct ast_stmt_routine routine;
+    } stmt;
 };
 
 #endif
