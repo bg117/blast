@@ -11,7 +11,7 @@
 #include "token.h"
 
 const struct key_value_pair PATTERNS[] = {
-    { NUMBER, "(\\d+(?:\\.\\d+)?)" },
+    { NUMBER, "([0-9]+(\\.[0-9]+)?)" },
     { STRING, "\"([^\"]*)\"" },
     { PLUS, "(\\+)" },
     { MINUS, "(-)" },
@@ -39,7 +39,7 @@ const struct key_value_pair PATTERNS[] = {
     { DO, "(do)" },
     { ROUTINE, "(routine)" },
     /* must be last to avoid matching keywords */
-    { IDENTIFIER, "(\\w+)" },
+    { IDENTIFIER, "([A-Za-z_$][A-Za-z0-9_$]*)" },
 };
 
 bool is_at_end(struct scanner *scanner)
@@ -90,6 +90,10 @@ void scan_single(struct scanner *scanner, struct token **tokens, int *num_tokens
         *tokens = realloc(*tokens, sizeof(struct token) * (*num_tokens + 1)); // allocate memory for new token
         (*tokens)[*num_tokens] = token;                                       // add token to tokens
         (*num_tokens)++;                                                      // increment number of tokens
+
+        scanner->i += match.rm_eo; // skip matched characters
+
+        return;
     }
 
     // if no pattern matches, error
