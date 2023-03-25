@@ -52,7 +52,8 @@ static void visit_expr_call(struct ast *ast, int depth)
     for (int i = 0; i < ast->expr.call.num_args; i++)
     {
         visit(ast->expr.call.args[i], depth + 1);
-        printf(" ");
+        if (i < ast->expr.call.num_args - 1)
+            printf(" ");
     }
     printf(")");
 }
