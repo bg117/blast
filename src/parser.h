@@ -12,8 +12,8 @@ struct token;
  */
 struct parser
 {
-    struct ast   *root;
     struct token *tokens;
+    int           num_tokens;
 
     int i;
 };
