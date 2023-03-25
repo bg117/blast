@@ -48,6 +48,33 @@ struct token *consume(struct parser *parser, int *types, int num_types)
     return NULL;
 }
 
+struct ast *expr_number(struct parser *parser)
+{
+    struct token *token    = consume(parser, (int[]){ TOKEN_NUMBER }, 1); // consume number token
+    struct ast   *ast      = malloc(sizeof(struct ast));                  // allocate memory for ast
+    ast->type              = AST_EXPR_NUMBER;                             // number ast
+    ast->expr.number.value = atof(token->lexeme);                         // set ast value
+    return ast;
+}
+
+struct ast *expr_string(struct parser *parser)
+{
+    struct token *token    = consume(parser, (int[]){ TOKEN_STRING }, 1); // consume string token
+    struct ast   *ast      = malloc(sizeof(struct ast));                  // allocate memory for ast
+    ast->type              = AST_EXPR_STRING;                             // string ast
+    ast->expr.string.value = token->lexeme;                               // set ast value
+    return ast;
+}
+
+struct ast *expr_variable(struct parser *parser)
+{
+    struct token *token     = consume(parser, (int[]){ TOKEN_IDENTIFIER }, 1); // consume variable token
+    struct ast   *ast       = malloc(sizeof(struct ast));                      // allocate memory for ast
+    ast->type               = AST_EXPR_VARIABLE;                               // variable ast
+    ast->expr.variable.name = token->lexeme;                                   // set ast name
+    return ast;
+}
+
 struct ast *parser_parse(void)
 {
     struct ast *root = malloc(sizeof(struct ast));
