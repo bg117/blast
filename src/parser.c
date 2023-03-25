@@ -207,8 +207,31 @@ struct ast *expr_equality(struct parser *parser)
     return ast;
 }
 
-struct ast *parser_parse(void)
+struct ast *expr_assignment(struct parser *parser)
 {
-    struct ast *root = malloc(sizeof(struct ast));
-    return root;
+    struct ast *ast = expr_equality(parser); // parse equality expression
+
+    if (check(parser, (int[]){ TOKEN_COLON }, 1)) // if current token is :
+    {
+        struct token *token    = consume(parser, (int[]){ TOKEN_COLON }, 1); // consume : token
+        struct ast   *rhs      = expr_assignment(parser);                    // recursively parse assignment expression
+        struct ast   *lhs      = ast;                                        // save initial ast
+        ast                    = malloc(sizeof(struct ast));                 // allocate memory for new ast
+        ast->type              = AST_EXPR_BINARY;                            // binary ast
+        ast->expr.binary.op    = token->type;                                // set ast operator
+        ast->expr.binary.left  = lhs;                                        // set ast left hand side
+        ast->expr.binary.right = rhs;                                        // set ast right hand side
+    }
+
+    return ast;
+}
+
+struct ast *expr(struct parser *parser)
+{
+    return expr_assignment(parser);
+}
+
+struct ast *parser_parse(struct parser *parser)
+{
+    return expr(parser);
 }

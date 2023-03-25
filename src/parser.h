@@ -18,6 +18,6 @@ struct parser
     int i;
 };
 
-struct ast *parser_parse(void);
+struct ast *parser_parse(struct parser *parser);
 
 #endif
