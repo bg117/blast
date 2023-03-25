@@ -25,6 +25,11 @@ static void visit_expr_binary(struct ast *ast, int depth)
     printf("%*s()", depth * 2, " "); // TODO: print nodes
 }
 
+static void visit_expr_unary(struct ast *ast, int depth)
+{
+    printf("%*s()", depth * 2, " "); // TODO: print nodes
+}
+
 void ast_printer(struct ast *ast)
 {
 
