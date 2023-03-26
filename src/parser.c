@@ -51,10 +51,29 @@ static struct ast *expr_string(struct parser *parser)
 
 static struct ast *expr_variable(struct parser *parser)
 {
-    struct token *token     = consume(parser, (int[]){ TOKEN_IDENTIFIER }, 1); // consume variable token
-    struct ast   *ast       = malloc(sizeof(struct ast));                      // allocate memory for ast
-    ast->type               = AST_EXPR_VARIABLE;                               // variable ast
-    ast->expr.variable.name = token->lexeme;                                   // set ast name
+    struct token *token = consume(parser, (int[]){ TOKEN_IDENTIFIER }, 1); // consume variable token
+    if (check(parser, (int[]){TOKEN_LPAREN}, 1))
+    {
+        struct ast *ast         = malloc(sizeof(struct ast)); // allocate memory for ast
+        ast->type               = AST_EXPR_CALL;              // call ast
+        ast->expr.call.name     = token->lexeme;              // set ast name
+        ast->expr.call.num_args = 0;                          // set ast number of arguments
+        ast->expr.call.args     = NULL;                       // set ast arguments
+        consume(parser, (int[]){ TOKEN_LPAREN }, 1);          // consume left parenthesis token
+        while (!check(parser, (int[]){ TOKEN_RPAREN }, 1))
+        {
+            ast->expr.call.num_args++; // increment number of arguments
+            ast->expr.call.args = realloc(
+                ast->expr.call.args, ast->expr.call.num_args * sizeof(struct ast *)); // reallocate memory for arguments
+            ast->expr.call.args[ast->expr.call.num_args - 1] = expr(parser);          // parse expression
+        }
+        consume(parser, (int[]){ TOKEN_RPAREN }, 1); // consume right parenthesis token
+        return ast;
+    }
+
+    struct ast *ast      = malloc(sizeof(struct ast)); // allocate memory for ast
+    ast->type            = AST_EXPR_VARIABLE;          // variable ast
+    ast->expr.variable.name = token->lexeme;           // set ast name
     return ast;
 }
 
