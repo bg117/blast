@@ -15,12 +15,8 @@ int main(int argc, char **argv)
     struct scanner scanner = { buf };
     int            num_tokens;
     struct token  *tokens = scanner_scan(&scanner, &num_tokens);
-
-    for (int i = 0; i < num_tokens; i++)
-        printf("%d: %s\n", tokens[i].type, tokens[i].lexeme);
-
-    struct parser parser = { tokens, num_tokens };
-    struct ast   *ast    = parser_parse(&parser);
+    struct parser  parser = { tokens, num_tokens };
+    struct ast    *ast    = parser_parse(&parser);
 
     ast_printer(ast);
 
