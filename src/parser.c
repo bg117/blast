@@ -38,7 +38,7 @@ static struct ast *program(struct parser *parser);
 
 struct ast *parser_parse(struct parser *parser)
 {
-    return expr(parser);
+    return program(parser);
 }
 
 static struct ast *expr_number(struct parser *parser)
