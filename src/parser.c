@@ -26,6 +26,7 @@ static struct ast *expr_equality(struct parser *parser);
 static struct ast *expr_assignment(struct parser *parser);
 static struct ast *expr(struct parser *parser);
 
+static struct ast *stmt_block(struct parser *parser, int *types, int num_types);
 static struct ast *stmt_routine(struct parser *parser);
 static struct ast *stmt_while(struct parser *parser);
 static struct ast *stmt_if(struct parser *parser);
@@ -280,6 +281,28 @@ static struct ast *stmt(struct parser *parser)
         return stmt_routine(parser);
 
     return stmt_expr(parser);
+}
+
+static struct ast *stmt_block(struct parser *parser, int *types, int num_types)
+{
+    struct ast *stmts     = malloc(sizeof(struct ast)); // allocate memory for ast
+    int         num_stmts = 0;                          // number of statements
+
+    while (!check(parser, types, num_types) &&
+           !is_at_end(parser)) // while current token is not one of the types and is not last token
+    {
+        struct ast *a = stmt(parser);                                          // parse statement
+        num_stmts++;                                                           // increment number of statements
+        stmts                = realloc(stmts, sizeof(struct ast) * num_stmts); // reallocate memory for ast
+        stmts[num_stmts - 1] = *a;                                             // add statement to ast
+    }
+
+    struct ast *node           = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type                 = AST_STMT_BLOCK;             // block ast
+    node->stmt.block.num_stmts = num_stmts;                  // set number of statements
+    node->stmt.block.stmts     = stmts;                      // set statements
+
+    return node;
 }
 
 static bool is_at_end(struct parser *parser)
