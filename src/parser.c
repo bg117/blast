@@ -26,6 +26,13 @@ static struct ast *expr_equality(struct parser *parser);
 static struct ast *expr_assignment(struct parser *parser);
 static struct ast *expr(struct parser *parser);
 
+static struct ast *stmt_routine(struct parser *parser);
+static struct ast *stmt_while(struct parser *parser);
+static struct ast *stmt_if(struct parser *parser);
+static struct ast *stmt_expr(struct parser *parser);
+static struct ast *stmt(struct parser *parser);
+static struct ast *program(struct parser *parser);
+
 struct ast *parser_parse(struct parser *parser)
 {
     return expr(parser);
@@ -52,7 +59,7 @@ static struct ast *expr_string(struct parser *parser)
 static struct ast *expr_variable(struct parser *parser)
 {
     struct token *token = consume(parser, (int[]){ TOKEN_IDENTIFIER }, 1); // consume variable token
-    if (check(parser, (int[]){TOKEN_LPAREN}, 1))
+    if (check(parser, (int[]){ TOKEN_LPAREN }, 1))
     {
         struct ast *ast         = malloc(sizeof(struct ast)); // allocate memory for ast
         ast->type               = AST_EXPR_CALL;              // call ast
@@ -71,9 +78,9 @@ static struct ast *expr_variable(struct parser *parser)
         return ast;
     }
 
-    struct ast *ast      = malloc(sizeof(struct ast)); // allocate memory for ast
-    ast->type            = AST_EXPR_VARIABLE;          // variable ast
-    ast->expr.variable.name = token->lexeme;           // set ast name
+    struct ast *ast         = malloc(sizeof(struct ast)); // allocate memory for ast
+    ast->type               = AST_EXPR_VARIABLE;          // variable ast
+    ast->expr.variable.name = token->lexeme;              // set ast name
     return ast;
 }
 
@@ -238,6 +245,27 @@ static struct ast *expr_assignment(struct parser *parser)
 static struct ast *expr(struct parser *parser)
 {
     return expr_assignment(parser);
+}
+
+static struct ast *program(struct parser *parser)
+{
+    struct ast *stmts     = malloc(sizeof(struct ast)); // allocate memory for ast
+    int         num_stmts = 0;                          // number of statements
+
+    while (!is_at_end(parser)) // while current token is not last token
+    {
+        struct ast *stmt = stmt_expr(parser);                                  // parse expression statement
+        num_stmts++;                                                           // increment number of statements
+        stmts                = realloc(stmts, sizeof(struct ast) * num_stmts); // reallocate memory for ast
+        stmts[num_stmts - 1] = *stmt;                                          // add statement to ast
+    }
+
+    struct ast *node           = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type                 = AST_STMT_BLOCK;             // program ast
+    node->stmt.block.num_stmts = num_stmts;                  // set number of statements
+    node->stmt.block.stmts     = stmts;                      // set statements
+
+    return node;
 }
 
 static bool is_at_end(struct parser *parser)
