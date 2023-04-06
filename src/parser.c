@@ -268,6 +268,20 @@ static struct ast *program(struct parser *parser)
     return node;
 }
 
+static struct ast *stmt(struct parser *parser)
+{
+    if (check(parser, (int[]){ TOKEN_IF }, 1))
+        return stmt_if(parser);
+
+    if (check(parser, (int[]){ TOKEN_WHILE }, 1))
+        return stmt_while(parser);
+
+    if (check(parser, (int[]){ TOKEN_ROUTINE }, 1))
+        return stmt_routine(parser);
+
+    return stmt_expr(parser);
+}
+
 static bool is_at_end(struct parser *parser)
 {
     return parser->i >= parser->num_tokens; // current token is last token
