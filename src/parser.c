@@ -319,10 +319,11 @@ static struct ast *stmt_if(struct parser *parser)
 
     struct ast *then = stmt_block(parser, CONS(TOKEN_ELSE, TOKEN_END)); // parse then block, either stop at else or end
 
-    struct ast *node    = malloc(sizeof(struct ast)); // allocate memory for ast
-    node->type          = AST_STMT_IF;                // if else ast
-    node->stmt.if_.cond = cond;                       // set condition
-    node->stmt.if_.then = then;                       // set then block
+    struct ast *node     = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type           = AST_STMT_IF;                // if else ast
+    node->stmt.if_.cond  = cond;                       // set condition
+    node->stmt.if_.then  = then;                       // set then block
+    node->stmt.if_.else_ = NULL;                       // set else block to null
 
     if (check(parser, CONS(TOKEN_ELSE))) // if current token is else
     {
