@@ -294,6 +294,13 @@ static struct ast *stmt_block(struct parser *parser, int *types, int num_types)
         stmts[num_stmts - 1] = *a;                                             // add statement to ast
     }
 
+    if (is_at_end(parser) &&
+        !check(parser, types, num_types)) // if current token is last token and is not one of the types
+    {
+        fprintf(stderr, "error: expected %d, got %d\n", types[0], parser->tokens[parser->i].type);
+        return NULL;
+    }
+
     struct ast *node           = malloc(sizeof(struct ast)); // allocate memory for ast
     node->type                 = AST_STMT_BLOCK;             // block ast
     node->stmt.block.num_stmts = num_stmts;                  // set number of statements
