@@ -329,6 +329,26 @@ static struct ast *stmt_if(struct parser *parser)
     return node;
 }
 
+static struct ast *stmt_while(struct parser *parser)
+{
+    consume(parser, CONS(TOKEN_WHILE)); // consume while token
+
+    struct ast *cond = expr(parser); // parse condition
+
+    consume(parser, CONS(TOKEN_DO)); // consume do token
+
+    struct ast *body = stmt_block(parser, CONS(TOKEN_END)); // parse body block, stop at end
+
+    consume(parser, (int[]){ TOKEN_END }, 1); // consume endwhile token
+
+    struct ast *node    = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type          = AST_STMT_WHILE;             // while ast
+    node->stmt.while_.cond = cond;                    // set condition
+    node->stmt.while_.body = body;                    // set body block
+
+    return node;
+}
+
 static bool is_at_end(struct parser *parser)
 {
     return parser->i >= parser->num_tokens; // current token is last token
