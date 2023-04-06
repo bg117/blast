@@ -341,10 +341,45 @@ static struct ast *stmt_while(struct parser *parser)
 
     consume(parser, CONS(TOKEN_END)); // consume endwhile token
 
-    struct ast *node    = malloc(sizeof(struct ast)); // allocate memory for ast
-    node->type          = AST_STMT_WHILE;             // while ast
-    node->stmt.while_.cond = cond;                    // set condition
-    node->stmt.while_.body = body;                    // set body block
+    struct ast *node       = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type             = AST_STMT_WHILE;             // while ast
+    node->stmt.while_.cond = cond;                       // set condition
+    node->stmt.while_.body = body;                       // set body block
+
+    return node;
+}
+
+static struct ast *stmt_routine(struct parser *parser)
+{
+    consume(parser, CONS(TOKEN_ROUTINE)); // consume routine token
+
+    struct token *name = consume(parser, CONS(TOKEN_IDENTIFIER)); // consume identifier token
+
+    consume(parser, CONS(TOKEN_LPAREN)); // consume ( token
+
+    char *params     = malloc(sizeof(char)); // allocate memory for ast
+    int   num_params = 0;                    // number of parameters
+
+    while (!check(parser, CONS(TOKEN_RPAREN))) // while current token is not )
+    {
+        struct token *param = consume(parser, CONS(TOKEN_IDENTIFIER));       // consume identifier token
+        num_params++;                                                        // increment number of parameters
+        params                 = realloc(params, sizeof(char) * num_params); // reallocate memory for params
+        params[num_params - 1] = param->lexeme;                              // add parameter to list
+    }
+
+    consume(parser, CONS(TOKEN_RPAREN)); // consume ) token
+
+    struct ast *body = stmt_block(parser, CONS(TOKEN_END)); // parse body block, stop at end
+
+    consume(parser, CONS(TOKEN_END)); // consume end token
+
+    struct ast *node              = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type                    = AST_STMT_ROUTINE;           // routine ast
+    node->stmt.routine.name       = name;                       // set name
+    node->stmt.routine.num_params = num_params;                 // set number of parameters
+    node->stmt.routine.params     = params;                     // set parameters
+    node->stmt.routine.body       = body;                       // set body block
 
     return node;
 }
