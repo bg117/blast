@@ -305,6 +305,33 @@ static struct ast *stmt_block(struct parser *parser, int *types, int num_types)
     return node;
 }
 
+static struct ast *stmt_if(struct parser *parser)
+{
+    consume(parser, (int[]){ TOKEN_IF }, 1); // consume if token
+
+    struct ast *cond = expr(parser); // parse condition
+
+    consume(parser, (int[]){ TOKEN_THEN }, 1); // consume then token
+
+    struct ast *then = stmt_block(parser, (int[]){ TOKEN_ELSE, TOKEN_END }, 2); // parse then block
+
+    struct ast *node    = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type          = AST_STMT_IF;                // if else ast
+    node->stmt.if_.cond = cond;                       // set condition
+    node->stmt.if_.then = then;                       // set then block
+
+    if (check(parser, (int[]){ TOKEN_ELSE }, 1)) // if current token is else
+    {
+        consume(parser, (int[]){ TOKEN_ELSE }, 1);                          // consume else token
+        struct ast *else_    = stmt_block(parser, (int[]){ TOKEN_END }, 1); // parse else block
+        node->stmt.if_.else_ = else_;                                       // set else block
+    }
+
+    consume(parser, (int[]){ TOKEN_END }, 1); // consume endif token
+
+    return node;
+}
+
 static bool is_at_end(struct parser *parser)
 {
     return parser->i >= parser->num_tokens; // current token is last token
