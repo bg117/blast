@@ -384,6 +384,19 @@ static struct ast *stmt_routine(struct parser *parser)
     return node;
 }
 
+static struct ast *stmt_expr(struct parser *parser)
+{
+    struct ast *a = expr(parser); // parse expression
+
+    consume(parser, CONS(TOKEN_PERIOD)); // consume . token
+
+    struct ast *node     = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type           = AST_STMT_EXPR;              // expression ast
+    node->stmt.expr.expr = a;                          // set expression
+
+    return node;
+}
+
 static bool is_at_end(struct parser *parser)
 {
     return parser->i >= parser->num_tokens; // current token is last token
