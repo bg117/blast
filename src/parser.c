@@ -252,10 +252,10 @@ static struct ast *program(struct parser *parser)
 
     while (!is_at_end(parser)) // while current token is not last token
     {
-        struct ast *stmt = stmt_expr(parser);                                    // parse expression statement
+        struct ast *a = stmt(parser);                                            // parse expression statement
         num_stmts++;                                                             // increment number of statements
         stmts                = realloc(stmts, sizeof(struct ast *) * num_stmts); // reallocate memory for ast
-        stmts[num_stmts - 1] = stmt;                                             // add statement to ast
+        stmts[num_stmts - 1] = a;                                                // add statement to ast
     }
 
     struct ast *node           = malloc(sizeof(struct ast)); // allocate memory for ast
