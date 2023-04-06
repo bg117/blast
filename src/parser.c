@@ -339,7 +339,7 @@ static struct ast *stmt_while(struct parser *parser)
 
     struct ast *body = stmt_block(parser, CONS(TOKEN_END)); // parse body block, stop at end
 
-    consume(parser, (int[]){ TOKEN_END }, 1); // consume endwhile token
+    consume(parser, CONS(TOKEN_END)); // consume endwhile token
 
     struct ast *node    = malloc(sizeof(struct ast)); // allocate memory for ast
     node->type          = AST_STMT_WHILE;             // while ast
