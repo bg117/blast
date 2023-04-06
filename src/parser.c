@@ -247,15 +247,15 @@ static struct ast *expr(struct parser *parser)
 
 static struct ast *program(struct parser *parser)
 {
-    struct ast *stmts     = malloc(sizeof(struct ast)); // allocate memory for ast
-    int         num_stmts = 0;                          // number of statements
+    struct ast **stmts     = malloc(sizeof(struct ast *)); // allocate memory for ast
+    int          num_stmts = 0;                            // number of statements
 
     while (!is_at_end(parser)) // while current token is not last token
     {
-        struct ast *stmt = stmt_expr(parser);                                  // parse expression statement
-        num_stmts++;                                                           // increment number of statements
-        stmts                = realloc(stmts, sizeof(struct ast) * num_stmts); // reallocate memory for ast
-        stmts[num_stmts - 1] = *stmt;                                          // add statement to ast
+        struct ast *stmt = stmt_expr(parser);                                    // parse expression statement
+        num_stmts++;                                                             // increment number of statements
+        stmts                = realloc(stmts, sizeof(struct ast *) * num_stmts); // reallocate memory for ast
+        stmts[num_stmts - 1] = stmt;                                             // add statement to ast
     }
 
     struct ast *node           = malloc(sizeof(struct ast)); // allocate memory for ast
@@ -282,16 +282,16 @@ static struct ast *stmt(struct parser *parser)
 
 static struct ast *stmt_block(struct parser *parser, int *types, int num_types)
 {
-    struct ast *stmts     = malloc(sizeof(struct ast)); // allocate memory for ast
-    int         num_stmts = 0;                          // number of statements
+    struct ast **stmts     = malloc(sizeof(struct ast *)); // allocate memory for ast
+    int          num_stmts = 0;                            // number of statements
 
     while (!check(parser, types, num_types) &&
            !is_at_end(parser)) // while current token is not one of the types and is not last token
     {
-        struct ast *a = stmt(parser);                                          // parse statement
-        num_stmts++;                                                           // increment number of statements
-        stmts                = realloc(stmts, sizeof(struct ast) * num_stmts); // reallocate memory for ast
-        stmts[num_stmts - 1] = *a;                                             // add statement to ast
+        struct ast *a = stmt(parser);                                            // parse statement
+        num_stmts++;                                                             // increment number of statements
+        stmts                = realloc(stmts, sizeof(struct ast *) * num_stmts); // reallocate memory for ast
+        stmts[num_stmts - 1] = a;                                                // add statement to ast
     }
 
     if (is_at_end(parser) &&
@@ -360,19 +360,19 @@ static struct ast *stmt_routine(struct parser *parser)
 {
     consume(parser, CONS(TOKEN_ROUTINE)); // consume routine token
 
-    struct token *name = consume(parser, CONS(TOKEN_IDENTIFIER)); // consume identifier token
+    char *name = consume(parser, CONS(TOKEN_IDENTIFIER))->lexeme; // consume identifier token
 
     consume(parser, CONS(TOKEN_LPAREN)); // consume ( token
 
-    char *params     = malloc(sizeof(char)); // allocate memory for ast
-    int   num_params = 0;                    // number of parameters
+    char **params     = malloc(sizeof(char *)); // allocate memory for ast
+    int    num_params = 0;                      // number of parameters
 
     while (!check(parser, CONS(TOKEN_RPAREN))) // while current token is not )
     {
-        struct token *param = consume(parser, CONS(TOKEN_IDENTIFIER));       // consume identifier token
-        num_params++;                                                        // increment number of parameters
-        params                 = realloc(params, sizeof(char) * num_params); // reallocate memory for params
-        params[num_params - 1] = param->lexeme;                              // add parameter to list
+        struct token *param = consume(parser, CONS(TOKEN_IDENTIFIER));         // consume identifier token
+        num_params++;                                                          // increment number of parameters
+        params                 = realloc(params, sizeof(char *) * num_params); // reallocate memory for params
+        params[num_params - 1] = param->lexeme;                                // add parameter to list
     }
 
     consume(parser, CONS(TOKEN_RPAREN)); // consume ) token
