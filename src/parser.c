@@ -324,7 +324,7 @@ static struct ast *stmt_if(struct parser *parser)
         node->stmt.if_.else_ = else_;                               // set else block
     }
 
-    consume(parser, (int[]){ TOKEN_END }, 1); // consume endif token
+    consume(parser, CONS(TOKEN_END)); // consume end token
 
     return node;
 }
