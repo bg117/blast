@@ -44,7 +44,7 @@ char *get_multiline_input(void)
 
         if (f == NULL) // EOF
         {
-            printf("\b\b\b\b\b\b      \n");
+            printf("\b\b\b\b\b\b      \b\b\b\b\b\b");
             break;
         }
 

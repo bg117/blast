@@ -21,7 +21,7 @@ static void visit(struct ast *ast, int depth);
 
 static void visit_expr_number(struct ast *ast, int depth)
 {
-    printf("%f", ast->expr.number.value);
+    printf("%g", ast->expr.number.value);
 }
 
 static void visit_expr_string(struct ast *ast, int depth)
@@ -119,7 +119,7 @@ static void visit_stmt_expr(struct ast *ast, int depth)
 {
     printf("%*s", depth * 4, "");
     visit(ast->stmt.expr.expr, depth + 1);
-    printf(".\n");
+    printf("\n");
 }
 
 static void visit_stmt_block(struct ast *ast, int depth)
