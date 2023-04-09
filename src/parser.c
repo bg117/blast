@@ -37,6 +37,9 @@ static struct ast *stmt_expr(struct parser *parser);
 static struct ast *stmt(struct parser *parser);
 static struct ast *program(struct parser *parser);
 
+// throw error expecting one of the types
+static void expect(int *expected, int num_expected, int got);
+
 struct ast *parser_parse(struct parser *parser)
 {
     return program(parser);
@@ -303,7 +306,7 @@ static struct ast *stmt_block(struct parser *parser, int *types, int num_types)
     if (is_at_end(parser) &&
         !check(parser, types, num_types)) // if current token is last token and is not one of the types
     {
-        fprintf(stderr, "error: expected %d, got %d\n", types[0], parser->tokens[parser->i].type);
+        expect(types, num_types, peek(parser)->type); // expect one of the types
         return NULL;
     }
 
@@ -446,24 +449,29 @@ static struct token *consume(struct parser *parser, int *types, int num_types)
         return token;                       // return reference to current token
     }
 
+    expect(types, num_types, peek(parser)->type);
+    return NULL;
+}
+
+static void expect(int *expected, int num_expected, int got)
+{
     // expected any of types[0], types[1], ..., types[num_types - 1], got types[0] instead
     char *buf = malloc(sizeof(char) * 1024);
     buf[0]    = '\0';
 
-    for (int i = 0; i < num_types; i++) // for each type
+    for (int i = 0; i < num_expected; i++) // for each type
     {
-        const char *type = token_type_to_string(types[i]); // get string representation of type
-        strcat(buf, type);                                 // append type to buffer
+        const char *type = token_type_to_string(expected[i]); // get string representation of type
+        strcat(buf, type);                                    // append type to buffer
 
-        if (i < num_types - 1) // if not last type
-            strcat(buf, ", "); // append , to buffer
+        if (i < num_expected - 1) // if not last type
+            strcat(buf, ", ");    // append , to buffer
     }
 
-    const char *got    = token_type_to_string(peek(parser)->type); // get string representation of current token type
-    const char *any_of = "any of ";
-    if (num_types == 1)
+    const char *got_str = token_type_to_string(got); // get string representation of current token type
+    const char *any_of  = "any of ";
+    if (num_expected == 1)
         any_of = "";
 
-    fprintf(stderr, "error: expected %s%s, got %s instead\n", any_of, buf, got); // print error message
-    return NULL;
+    fprintf(stderr, "error: expected %s%s, got %s instead\n", any_of, buf, got_str); // print error message
 }
