@@ -183,7 +183,8 @@ static void visit_stmt_routine(struct ast *ast, int depth)
 void ast_printer(struct ast *ast)
 {
     bool error = ast_error_precheck(ast); // check if there are any errors
-    visit(ast, 0);
+    if (!error)
+        visit(ast, 0);
 }
 
 static bool ast_error_precheck(struct ast *ast)
