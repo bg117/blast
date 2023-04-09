@@ -19,7 +19,17 @@ enum ast_type
     AST_STMT_BLOCK,
     AST_STMT_IF,
     AST_STMT_WHILE,
-    AST_STMT_ROUTINE
+    AST_STMT_ROUTINE,
+
+    AST_ERROR
+};
+
+/**
+ * @brief Struct representing an error in the parsing stage.
+ */
+struct ast_error
+{
+    char *message;
 };
 
 /**
@@ -152,6 +162,8 @@ struct ast
             struct ast_stmt_while   while_;
             struct ast_stmt_routine routine;
         } stmt;
+
+        struct ast_error error;
     };
 };
 

@@ -1,5 +1,6 @@
 #include "ast_printer.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "ast.h"
@@ -17,7 +18,13 @@ static void visit_stmt_if(struct ast *ast, int depth);
 static void visit_stmt_while(struct ast *ast, int depth);
 static void visit_stmt_routine(struct ast *ast, int depth);
 
+static void visit_error(struct ast *ast, int depth);
+
 static void visit(struct ast *ast, int depth);
+
+// checks if the AST has any errors; if it does, it prints them
+// and does not continue printing other parts of the AST
+static bool ast_error_precheck(struct ast *ast);
 
 static void visit_expr_number(struct ast *ast, int depth)
 {
@@ -175,5 +182,41 @@ static void visit_stmt_routine(struct ast *ast, int depth)
 
 void ast_printer(struct ast *ast)
 {
+    bool error = ast_error_precheck(ast); // check if there are any errors
     visit(ast, 0);
+}
+
+static bool ast_error_precheck(struct ast *ast)
+{
+    switch (ast->type)
+    {
+    case AST_ERROR: // if there is an error, print it and return true
+        fprintf(stderr, "error: %s\n", ast->error.message);
+        return true;
+    case AST_EXPR_BINARY: // check children
+        return ast_error_precheck(ast->expr.binary.left) || ast_error_precheck(ast->expr.binary.right);
+    case AST_EXPR_UNARY:
+        return ast_error_precheck(ast->expr.unary.expr);
+    case AST_EXPR_CALL: // check arguments
+        for (int i = 0; i < ast->expr.call.num_args; i++)
+            if (ast_error_precheck(ast->expr.call.args[i]))
+                return true;
+        return false;
+    case AST_STMT_EXPR: // check expression
+        return ast_error_precheck(ast->stmt.expr.expr);
+    case AST_STMT_BLOCK: // check statements
+        for (int i = 0; i < ast->stmt.block.num_stmts; i++)
+            if (ast_error_precheck(ast->stmt.block.stmts[i]))
+                return true;
+        return false;
+    case AST_STMT_IF: // check condition, body, else-body
+        return ast_error_precheck(ast->stmt.if_.cond) || ast_error_precheck(ast->stmt.if_.then) ||
+               ast_error_precheck(ast->stmt.if_.else_);
+    case AST_STMT_WHILE: // check condition, body
+        return ast_error_precheck(ast->stmt.while_.cond) || ast_error_precheck(ast->stmt.while_.body);
+    case AST_STMT_ROUTINE: // check body
+        return ast_error_precheck(ast->stmt.routine.body);
+    default: // no error
+        return false;
+    }
 }
