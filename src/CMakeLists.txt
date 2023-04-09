@@ -11,4 +11,5 @@ add_executable(blast
     parser.c
     ast_printer.h
     ast_printer.c
+    token.c
 )

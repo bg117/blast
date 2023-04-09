@@ -57,4 +57,12 @@ struct token
     char *lexeme;
 };
 
+/**
+ * @brief Converts a token type to a string.
+ *
+ * @param type The token type.
+ * @return const char* The string representation of the token type.
+ */
+const char *token_type_to_string(int type);
+
 #endif
