@@ -36,11 +36,23 @@ static void visit_expr_variable(struct ast *ast, int depth)
 
 static void visit_expr_binary(struct ast *ast, int depth)
 {
-    printf("(");
+    if (ast->expr.binary.left->type == AST_EXPR_BINARY)
+        printf("(");
+
     visit(ast->expr.binary.left, depth + 1);
+
+    if (ast->expr.binary.left->type == AST_EXPR_BINARY)
+        printf(")");
+
     printf(" %s ", ast->expr.binary.op.lexeme);
+
+    if (ast->expr.binary.right->type == AST_EXPR_BINARY)
+        printf("(");
+
     visit(ast->expr.binary.right, depth + 1);
-    printf(")");
+
+    if (ast->expr.binary.right->type == AST_EXPR_BINARY)
+        printf(")");
 }
 
 static void visit_expr_unary(struct ast *ast, int depth)
