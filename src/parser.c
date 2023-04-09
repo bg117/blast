@@ -282,6 +282,8 @@ static struct ast *stmt(struct parser *parser)
     // if there is a period consume it
     if (check(parser, CONS(TOKEN_PERIOD)))
         consume(parser, CONS(TOKEN_PERIOD));
+
+    return ast;
 }
 
 static struct ast *stmt_block(struct parser *parser, int *types, int num_types)
