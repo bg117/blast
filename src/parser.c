@@ -38,7 +38,7 @@ static struct ast *stmt(struct parser *parser);
 static struct ast *program(struct parser *parser);
 
 // throw error expecting one of the types
-static void expect(int *expected, int num_expected, int got);
+static struct ast *expect(int *expected, int num_expected, int got);
 
 struct ast *parser_parse(struct parser *parser)
 {
@@ -110,8 +110,11 @@ static struct ast *expr_primary(struct parser *parser)
         return ast;
     }
 
-    fprintf(stderr, "error: expected expression\n");
-    return NULL;
+    // error node
+    struct ast *ast    = malloc(sizeof(struct ast)); // allocate memory for ast
+    ast->type          = AST_ERROR;                  // error ast
+    ast->error.message = "expected expression";      // set error type
+    return ast;
 }
 
 static struct ast *expr_unary(struct parser *parser)
@@ -306,8 +309,7 @@ static struct ast *stmt_block(struct parser *parser, int *types, int num_types)
     if (is_at_end(parser) &&
         !check(parser, types, num_types)) // if current token is last token and is not one of the types
     {
-        expect(types, num_types, peek(parser)->type); // expect one of the types
-        return NULL;
+        return expect(types, num_types, peek(parser)->type); // expect one of the types
     }
 
     struct ast *node           = malloc(sizeof(struct ast)); // allocate memory for ast
@@ -449,29 +451,44 @@ static struct token *consume(struct parser *parser, int *types, int num_types)
         return token;                       // return reference to current token
     }
 
-    expect(types, num_types, peek(parser)->type);
-    return NULL;
+    return expect(types, num_types, peek(parser)->type); // AST error node
 }
 
-static void expect(int *expected, int num_expected, int got)
+static struct ast *expect(int *expected, int num_expected, int got)
 {
     // expected any of types[0], types[1], ..., types[num_types - 1], got types[0] instead
-    char *buf = malloc(sizeof(char) * 1024);
-    buf[0]    = '\0';
+    char *tok_strs = malloc(sizeof(char) * 1024);
+    tok_strs[0]    = '\0';
+
+    const char *first  = "expected ";
+    const char *any_of = "any of ";
+    if (num_expected == 1)
+        any_of = "";
+    const char *middle = ", got ";
+    const char *last   = " instead";
+
+    const char *got_str = token_type_to_string(got); // get string representation of current token type
 
     for (int i = 0; i < num_expected; i++) // for each type
     {
         const char *type = token_type_to_string(expected[i]); // get string representation of type
-        strcat(buf, type);                                    // append type to buffer
+        strcat(tok_strs, type);                               // append type to buffer
 
-        if (i < num_expected - 1) // if not last type
-            strcat(buf, ", ");    // append , to buffer
+        if (i < num_expected - 1)   // if not last type
+            strcat(tok_strs, ", "); // append , to buffer
     }
 
-    const char *got_str = token_type_to_string(got); // get string representation of current token type
-    const char *any_of  = "any of ";
-    if (num_expected == 1)
-        any_of = "";
+    char *err = malloc(sizeof(char) * 1024); // allocate memory for error message
+    err[0]    = '\0';                        // set first character to null terminator
+    strcat(err, first);
+    strcat(err, any_of);
+    strcat(err, tok_strs);
+    strcat(err, middle);
+    strcat(err, got_str);
+    strcat(err, last);
 
-    fprintf(stderr, "error: expected %s%s, got %s instead\n", any_of, buf, got_str); // print error message
+    struct ast *node    = malloc(sizeof(struct ast)); // allocate memory for ast
+    node->type          = AST_ERROR;                  // error ast
+    node->error.message = err;                        // set error message
+    return node;
 }
