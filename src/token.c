@@ -32,7 +32,7 @@ static const struct key_value_pair TOKEN_TYPE_STR[] = {
     { TOKEN_ROUTINE, "routine" },
 };
 
-const char *token_type_to_string(enum token_type type)
+const char *token_type_to_string(int type)
 {
     for (int i = 0; i < sizeof(TOKEN_TYPE_STR) / sizeof(TOKEN_TYPE_STR[0]); i++)
         if (TOKEN_TYPE_STR[i].key == type)
