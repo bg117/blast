@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "ast.h"
 #include "token.h"
@@ -443,5 +444,24 @@ static struct token *consume(struct parser *parser, int *types, int num_types)
         return token;                       // return reference to current token
     }
 
+    // expected any of types[0], types[1], ..., types[num_types - 1], got types[0] instead
+    char *buf = malloc(sizeof(char) * 1024);
+    buf[0]    = '\0';
+
+    for (int i = 0; i < num_types; i++) // for each type
+    {
+        const char *type = token_type_to_string(types[i]); // get string representation of type
+        strcat(buf, type);                                 // append type to buffer
+
+        if (i < num_types - 1) // if not last type
+            strcat(buf, ", "); // append , to buffer
+    }
+
+    const char *got    = token_type_to_string(peek(parser)->type); // get string representation of current token type
+    const char *any_of = "any of ";
+    if (num_types == 1)
+        any_of = "";
+
+    fprintf(stderr, "error: expected %s%s, got %s instead\n", any_of, buf, got); // print error message
     return NULL;
 }
