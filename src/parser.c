@@ -462,7 +462,9 @@ static void expect(int *expected, int num_expected, int got)
     for (int i = 0; i < num_expected; i++) // for each type
     {
         const char *type = token_type_to_string(expected[i]); // get string representation of type
+        strcat(buf, "'");                                     // append ' to buffer
         strcat(buf, type);                                    // append type to buffer
+        strcat(buf, "'");
 
         if (i < num_expected - 1) // if not last type
             strcat(buf, ", ");    // append , to buffer
@@ -473,5 +475,5 @@ static void expect(int *expected, int num_expected, int got)
     if (num_expected == 1)
         any_of = "";
 
-    fprintf(stderr, "error: expected %s%s, got %s instead\n", any_of, buf, got_str); // print error message
+    fprintf(stderr, "error: expected %s%s, got '%s' instead\n", any_of, buf, got_str); // print error message
 }
