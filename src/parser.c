@@ -268,16 +268,19 @@ static struct ast *program(struct parser *parser)
 
 static struct ast *stmt(struct parser *parser)
 {
+    struct ast *ast = NULL;
     if (check(parser, CONS(TOKEN_IF)))
-        return stmt_if(parser);
+        ast = stmt_if(parser);
+    else if (check(parser, CONS(TOKEN_WHILE)))
+        ast = stmt_while(parser);
+    else if (check(parser, CONS(TOKEN_ROUTINE)))
+        ast = stmt_routine(parser);
+    else
+        ast = stmt_expr(parser);
 
-    if (check(parser, CONS(TOKEN_WHILE)))
-        return stmt_while(parser);
-
-    if (check(parser, CONS(TOKEN_ROUTINE)))
-        return stmt_routine(parser);
-
-    return stmt_expr(parser);
+    // if there is a period consume it
+    if (check(parser, CONS(TOKEN_PERIOD)))
+        consume(parser, CONS(TOKEN_PERIOD));
 }
 
 static struct ast *stmt_block(struct parser *parser, int *types, int num_types)
@@ -395,8 +398,6 @@ static struct ast *stmt_routine(struct parser *parser)
 static struct ast *stmt_expr(struct parser *parser)
 {
     struct ast *a = expr(parser); // parse expression
-
-    consume(parser, CONS(TOKEN_PERIOD)); // consume . token
 
     struct ast *node     = malloc(sizeof(struct ast)); // allocate memory for ast
     node->type           = AST_STMT_EXPR;              // expression ast
