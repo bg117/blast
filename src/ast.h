@@ -137,8 +137,7 @@ struct ast
 {
     int type;
     union {
-        union
-        {
+        union {
             struct ast_expr_binary   binary;
             struct ast_expr_unary    unary;
             struct ast_expr_number   number;
@@ -146,8 +145,7 @@ struct ast
             struct ast_expr_variable variable;
             struct ast_expr_call     call;
         } expr;
-        union
-        {
+        union {
             struct ast_stmt_expr    expr;
             struct ast_stmt_block   block;
             struct ast_stmt_if      if_;
